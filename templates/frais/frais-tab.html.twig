@@ -1,0 +1,171 @@
+
+<div class="row">
+    <div class="col-4 pr-4 pt-3  pl-4 ">
+        <div id="cardForfait" class="bg-light round container">
+            <h2 class="text-ocean pt-3">
+                Frais Forfait
+            </h2>
+            <form method="POST" action="index.php?uc=adminFrais&action=MAJFiche">
+
+
+                <table class="table table-light">
+
+                    <tbody>
+
+                        
+                            <tr>
+                                <td scope="row"><? echo $ff['libelle'] ?></td>
+                                <td id="qtForfait">
+                                    <input type="text" class="form-control text-center" name="lesFraisForfait[<?php echo $ff['idfrais'] ?>]" id="QuantiteForfait" placeholder="<? echo $ff['quantite'] ?>">
+                                </td>
+
+                            </tr>
+                      
+                    </tbody>
+                </table>
+                <input type="hidden" id='idVisiteur' name="idVisiteur" value="<? echo $idVisiteurFiche ?>">
+                <input type="hidden" id='mois' name="mois" value="<? echo $mois ?>">
+                <button type="submit" class="mt-3 mb-2 btn btn-default bg-dark text-white"> Enregistrer</button>
+            </form>
+        </div>
+
+    </div>
+    <div class="col my-auto align-self-end bg-white p-2 ml-5 m-2 round ">
+        <h2 class="grey-text">Fiche frais de </h2>
+        <br>
+        <h2 class="text-ocean">
+            Frais Hors Forfait
+        </h2>
+         <form method="POST" id="ValiderFiche" action="index.php?uc=adminFrais&action=ValideFiche">
+
+        <table class="table-light">
+            <thead>
+                <tr>
+                    <th>Libelle</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                    <th class="pl-2">
+
+
+
+                    </th>
+
+                </tr>
+            </thead>
+           
+            <tbody>
+                    <tr>
+                      
+                        <td scope="row"></td>
+                        <td><? echo $f['date'] ?></td>
+                        <td class="p-2"><? echo $f['montant'] ?></td>
+                        <td class="p-2">
+
+                            <label class="img-fluid img-check" for="<? echo $i ?>">
+                                <i class="fas fa-trash-alt"><input type="checkbox"  data-idfrais= "<? echo $f['idForfait'] ?>" onchange="checkValidation(this)" class='hidden' name="supprimer" id="<? echo $i ?>" value="suppression"></i>
+
+                            </label>
+                            <label class="img-fluid img-check" for="valider">
+                                <i style='color: green;' class="fas fa-check"> <input type="checkbox" onchange="checkValidation(this)" class='hidden' name="valider" id="valider" value="valider"></i>
+
+                            </label>
+                            <label class="img-fluid img-check" for="report<? echo $i ?>">
+                                <i style='color: orange;' class="fas fa-bullhorn"> <input data-libelle= "<? echo $f['libelle'] ?>" data-date="<? echo $f['date'] ?>" data-montant="<? echo $f['montant'] ?>" data-mois="<? echo $mois ?>"  data-idfrais="<? echo $f['idForfait'] ?>" type="checkbox" onchange="reporter(this)" class='hidden' name="report" id="report<? echo $i ?>" value="report"></i>
+
+                            </label>
+
+
+                        </td>
+                    </tr>
+                <? endforeach ?> 
+
+            </tbody>
+         
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="mx-auto d-flex col-5 justify-content-center">
+    <input type="hidden" name="idVisiteur" value="<? echo $idVisiteurFiche ?>">
+                <input type="hidden" name="mois" value="<? echo $mois ?>">
+         <button type="submit" class="mt-3 mb-2 btn btn-default bg-dark text-white" form="ValiderFiche"> Valider la fiche</button>
+</form>
+    </div>
+               
+                    
+                <h3>Il n'y a pas de frais encore enregistré!</h3>
+                  
+               
+           
+</div>
+                          
+<script>
+    function checkValidation(elem) {
+       
+        let rep = confirm("Voulez vous supprimer ce frais ?")
+        if (elem.checked == true && rep == true) {
+        
+        $.post(
+            'ajax.php?action=supr', // Un script PHP que l'on va créer juste après
+            {
+                idfrais: elem.dataset.idfrais,  // Nous récupérons la valeur de nos inputs que l'on fait passer à connexion.php
+                
+            },
+
+            function(data){ 
+                if(data == 'success')
+                {
+                     alert('Frais supprimé!');// Cette foncti
+                }
+             
+            },
+
+            'text' // Nous souhaitons recevoir "Success" ou "Failed", donc on indique text !
+         );
+
+  
+             elem.closest('tr').style.backgroundColor = "#e1ede4";
+             elem.onchange = '';
+        } else {
+             elem.closest('tr').style.backgroundColor = "";
+        }
+
+
+
+    }
+
+    function reporter(elem){
+        let rep = confirm("Voulez vous reporter ce frais ?")
+        if (elem.checked == true && rep == true) {
+        
+        $.post({
+           url: 'ajax.php?action=report', 
+            data:{
+                idfrais: elem.dataset.idfrais,
+                mois: elem.dataset.mois,
+                date: elem.dataset.date,
+                libelle: elem.dataset.libelle,
+                montant: elem.dataset.montant,
+                idVisiteur: $("#visiteur").val(),
+            },
+           
+
+            complete:function(xhr){ 
+                
+                if(xhr.responseText.trim() === "success")
+                {
+                     alert('bien reporté');
+                }
+             
+            },
+
+            dataType:'text'
+        });
+
+  
+             elem.closest('tr').style.backgroundColor = "orange";
+        } else {
+             elem.closest('tr').style.backgroundColor = "";
+        }
+    }
+</script>

@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    {% for flashError in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+    {% endfor %}
+
+    <h1>Register</h1>
+
+    {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.login) }}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password'
+        }) }}
+        
+                {{ form_row(registrationForm.prenom) }}
+                 {{ form_row(registrationForm.adresse, {
+            label: 'Adresse'
+        }) }}
+         {{ form_row(registrationForm.CP, {
+            label: 'CP'
+        }) }}
+         {{ form_row(registrationForm.ville, {
+            label: 'ville'
+        }) }}
+         {{ form_row(registrationForm.dateembauche, {
+            label: 'dateembauche'
+        }) }}
+
+ {{ form_row(registrationForm.roles, {
+            label: 'role'
+        }) }}
+
+        <button type="submit" class="btn">Register</button>
+    {{ form_end(registrationForm) }}
+{% endblock %}
