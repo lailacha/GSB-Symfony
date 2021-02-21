@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Lignefraishorsforfait
  *
- * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="idVisiteur", columns={"idVisiteur", "mois"})})
+ * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="Relation", columns={"idVisiteur", "mois"})})
  * @ORM\Entity(repositoryClass="App\Repository\LigneFraisHFRepository")
  */
 class Lignefraishorsforfait
@@ -44,15 +44,20 @@ class Lignefraishorsforfait
     private $montant;
 
     /**
-     * @var \Fichefrais
+     * @var \Visiteur
      *
-     * @ORM\ManyToOne(targetEntity="Fichefrais")
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="Visiteur")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="idVisiteur"),
-     *   @ORM\JoinColumn(name="mois", referencedColumnName="mois")
+     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
      * })
      */
     private $idvisiteur;
+
+    /**
+     * @ORM\Column(type="string", length=3)
+     */
+    private $mois;
 
     public function getId(): ?int
     {
@@ -107,5 +112,15 @@ class Lignefraishorsforfait
         return $this;
     }
 
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
 
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
+
+        return $this;
+    }
 }

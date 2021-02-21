@@ -23,15 +23,15 @@ class FraisController extends AbstractController
 {
 
 
-    private $LigneFraisForfaitRepository;
+    private $ligneFraisForfaitRepository;
     private $fraisForfaitRepository;
-    private $fraisHorsForfaitRepository;
+    private $ligneFraisHorsForfaitRepository;
 
-    public function __construct(LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $fraisHorsForfaitRepository)
+    public function __construct(LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $ligneFraisHorsForfaitRepository)
     {
         $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
         $this->fraisForfaitRepository = $fraisForfaitRepository;
-        $this->fraisHorsForfaitRepository = $fraisHorsForfaitRepository;
+        $this->ligneFraisHorsForfaitRepository = $ligneFraisHorsForfaitRepository;
     }
 
     /**
@@ -57,9 +57,9 @@ class FraisController extends AbstractController
     /**
      * @Route("/frais/mois", name="sendMois")
      */
-    public function sendMois(Request $request)
+    public function sendMois(Request $request, FicheFraisRepository $ficheFraisRepository)
     {
-        return $this->json($this->ficheFraisRepository->findBy(['idvisiteur' => $request->get('id')]), 200, [], ['groups' => 'fiche:mois']);
+        return $this->json($ficheFraisRepository->findBy(['idvisiteur' => $request->get('id')]), 200, [], ['groups' => 'fiche:mois']);
     }
 
     /**
@@ -67,17 +67,18 @@ class FraisController extends AbstractController
      */
     public function sendFiche(Request $request)
     {
-        $fraisHF = $this->fraisHorsForfaitRepository->findBy([
-            'idvisiteur' => $request->get('idvisiteur'),
-            "mois" => $request->get('mois')
+
+
+        $fraisF = $this->ligneFraisForfaitRepository->findBy([
+            'visiteur' => "a17", "mois" => $request->get('mois')
         ]);
-        $fraisF = $this->fraisForfaitRepository->findBy([
-            'idvisiteur' => $request->get('idvisiteur'),
+
+        $fraisHF = $this->ligneFraisHorsForfaitRepository->findBy([
+            'idvisiteur' => "a17",
             "mois" => $request->get('mois')
         ]);
 
-        dd($fraisF);
-        return $this->render('frais/tab-fiche.html.twig', compact('fraisHF', 'fraisF'));
+        return $this->render('frais/frais-tab.html.twig', compact('fraisF', 'fraisHF'));
     }
 
     //TODO écrire un service qui récup les frais HF et FF by mois et idvisiteur

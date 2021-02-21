@@ -33,7 +33,7 @@ class LigneFraisForfait
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * 
+     * @Groups({"show_frais"})
      */
     private $quantite;
 

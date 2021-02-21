@@ -6,21 +6,24 @@
                 Frais Forfait
             </h2>
             <form method="POST" action="index.php?uc=adminFrais&action=MAJFiche">
-
+<pre>
+   
+</pre>
 
                 <table class="table table-light">
 
                     <tbody>
-
-                        
+                        {% for frais in fraisF %}
+      
                             <tr>
-                                <td scope="row"><? echo $ff['libelle'] ?></td>
+                                <td scope="row">{{frais.libelle}}</td>
                                 <td id="qtForfait">
                                     <input type="text" class="form-control text-center" name="lesFraisForfait[<?php echo $ff['idfrais'] ?>]" id="QuantiteForfait" placeholder="<? echo $ff['quantite'] ?>">
                                 </td>
 
                             </tr>
-                      
+                        {% endfor %}
+
                     </tbody>
                 </table>
                 <input type="hidden" id='idVisiteur' name="idVisiteur" value="<? echo $idVisiteurFiche ?>">
@@ -31,7 +34,7 @@
 
     </div>
     <div class="col my-auto align-self-end bg-white p-2 ml-5 m-2 round ">
-        <h2 class="grey-text">Fiche frais de </h2>
+        <h2 class="grey-text">Fiche frais de {{ fraisHF[0].idvisiteur.nom }}</h2>
         <br>
         <h2 class="text-ocean">
             Frais Hors Forfait

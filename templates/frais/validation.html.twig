@@ -51,6 +51,8 @@
         </div>
 
     </div>
+
+    <div id="tab-component"></div>
 {% if frais is defined %}
    {{include('frais/frais-tab.html.twig')}}
    {% endif %}
@@ -85,16 +87,14 @@
 
  getFiche = () => {
        {
-           let data = $("#critere").serialize();
+           var data = $("#critere").serialize();
            $.ajax({
-            type: 'GET',
             url: '{{ path('sendFiche') }}',
-            data: {
-                 data
-            },
-            dataType: 'json',
+            type: 'POST',
+            data: data,
             success: function(data) {
-               alert('cc');
+                document.getElementById('tab-component').innerHTML = data;
+               
             },
             error: function(data) {
                 alert('Récupération des donées impossible');
