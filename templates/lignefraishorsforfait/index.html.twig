@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lignefraishorsforfait index{% endblock %}
+
+{% block body %}
+    <h1>Lignefraishorsforfait index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Libelle</th>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>Mois</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for lignefraishorsforfait in lignefraishorsforfaits %}
+            <tr>
+                <td>{{ lignefraishorsforfait.id }}</td>
+                <td>{{ lignefraishorsforfait.libelle }}</td>
+                <td>{{ lignefraishorsforfait.date ? lignefraishorsforfait.date|date('Y-m-d') : '' }}</td>
+                <td>{{ lignefraishorsforfait.montant }}</td>
+                <td>{{ lignefraishorsforfait.mois }}</td>
+                <td>
+                    <a href="{{ path('lignefraishorsforfait_show', {'id': lignefraishorsforfait.id}) }}">show</a>
+                    <a href="{{ path('lignefraishorsforfait_edit', {'id': lignefraishorsforfait.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('lignefraishorsforfait_new') }}">Create new</a>
+{% endblock %}

@@ -25,11 +25,6 @@ class LigneFraisForfait
      */
     private $mois;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     * @Groups({"show_frais"})
-     */
-    private $idFraisForfait;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -43,6 +38,12 @@ class LigneFraisForfait
      * 
      */
     private $visiteur;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Fraisforfait::class, inversedBy="ligneFraisForfait")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $fraisForfait;
 
     public function getId(): ?int
     {
@@ -62,17 +63,6 @@ class LigneFraisForfait
         return $this;
     }
 
-    public function getIdFraisForfait(): ?string
-    {
-        return $this->idFraisForfait;
-    }
-
-    public function setIdFraisForfait(string $idFraisForfait): self
-    {
-        $this->idFraisForfait = $idFraisForfait;
-
-        return $this;
-    }
 
     public function getQuantite(): ?int
     {
@@ -94,6 +84,18 @@ class LigneFraisForfait
     public function setVisiteur(?Visiteur $visiteur): self
     {
         $this->visiteur = $visiteur;
+
+        return $this;
+    }
+
+    public function getFraisForfait(): ?Fraisforfait
+    {
+        return $this->fraisForfait;
+    }
+
+    public function setFraisForfait(?Fraisforfait $fraisForfait): self
+    {
+        $this->fraisForfait = $fraisForfait;
 
         return $this;
     }

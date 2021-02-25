@@ -70,11 +70,11 @@ class FraisController extends AbstractController
 
 
         $fraisF = $this->ligneFraisForfaitRepository->findBy([
-            'visiteur' => "a17", "mois" => $request->get('mois')
+            'visiteur' => $request->get('visiteur'), "mois" => $request->get('mois')
         ]);
 
         $fraisHF = $this->ligneFraisHorsForfaitRepository->findBy([
-            'idvisiteur' => "a17",
+            'idvisiteur' => $request->get('visiteur'),
             "mois" => $request->get('mois')
         ]);
 

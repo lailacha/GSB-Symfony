@@ -1,12 +1,18 @@
 /* Styles des divisions principales de la page */
 body {
-    background: rgb(82, 233, 254);
-    background: linear-gradient(0deg, rgba(82, 233, 254, 1) 1%, rgba(0, 52, 226, 1) 100%);
-    margin: 0% 0%;
+    background: #0aaffd;
     padding: 0;
     font-family: "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
     font-size: 0.8em;
-    height: 100vh;
+  }
+  html {
+    height: 100%;
+  }
+
+  body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
   }
   
   #page {
@@ -14,6 +20,7 @@ body {
     margin: 0%;
     padding: 0.1em;
     display: flex;
+   
   }
   
   #entete {
@@ -48,7 +55,7 @@ body {
     border: none;
     padding: 1.3em;
     background: linear-gradient(140.8deg, rgba(2, 149, 251, 1) 0%, rgba(101, 206, 249, 1) 55.83%, rgba(103, 207, 249, 1) 100%);
-  
+  margin-bottom: 200px;
   
     margin-top: 1.2em;
     /* permet de fixer une hauteur mini sur les navigateurs modernes */
@@ -112,7 +119,6 @@ body {
     overflow: scroll;
   }
   
-  #contenu h2 {}
   
   .logoValidW3c {
     display: inline;
@@ -304,7 +310,10 @@ body {
   }
   
   
-  
+  table
+  {
+    width: 100%;
+  }
   table td
   {
   color: #000 !important;

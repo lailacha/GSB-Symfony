@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Lignefraishorsforfait{% endblock %}
+
+{% block body %}
+    <h1>Create new Lignefraishorsforfait</h1>
+
+    {{ include('lignefraishorsforfait/_form.html.twig') }}
+
+    <a href="{{ path('lignefraishorsforfait_index') }}">back to list</a>
+{% endblock %}

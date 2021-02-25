@@ -32,6 +32,33 @@ class FicheFraisRepository extends ServiceEntityRepository
     }
 
     // /**
+    //  * retrun count of fiche by id and visiteur
+    //  */
+    public function getCountByIdAndMonth($id, $mois)
+    {
+
+        return $this->createQueryBuilder('f')
+            ->select('COUNT(f)')
+            ->andWhere('f.idvisiteur = :idvisiteur')
+            ->andWhere('f.mois = :mois')
+            ->setParameter('idvisiteur', $id)
+            ->setParameter('mois', $mois)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+
+    public function getLastMonthByVisiteur($id)
+    {
+        return $this->createQueryBuilder('f')
+            ->select('max(f.mois)')
+            ->andWhere('f.idvisiteur = :idvisiteur')
+            ->setParameter('idvisiteur', $id)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    // /**
     //  * @return Fichefrais[] Returns an array of Fichefrais objects
     //  */
     /*

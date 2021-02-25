@@ -90,6 +90,12 @@ class Fichefrais
         return $this->mois;
     }
 
+    public function setMois(string $mois)
+    {
+        $this->mois = $mois;
+
+        return $this;
+    }
     public function getNbjustificatifs(): ?int
     {
         return $this->nbjustificatifs;

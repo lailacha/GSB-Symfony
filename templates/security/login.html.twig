@@ -4,6 +4,7 @@
 
 {% block body %}
 
+<div class="container mt-1 mb-5">
 
 <form method="post">
     {% if error %}
@@ -20,22 +21,25 @@
         </div>
     {% endif %}
 
-<div class="container">
 
       <div class="row">
-       <div id="modeConnexion" class=" mx-auto col-md-6 col-10 bg-white p-5">
-    <h1 class="h3 mb-3 font-weight-normal">Se connecter</h1>
+<div class=" mt-5 container  p-0 " id='connexion1'>
+<div id='login' class=" shadow-lg round mx-auto col-md-6 col-10 p-5 rounded ">
+            <img class='mx-auto d-block mb-5' src="./images/GSB.png" alt="">
+    <h1 class="h3 mb-3 text-white font-weight-normal">Se connecter</h1>
     <label for="inputLogin">Login</label>
     <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control  mb-3" required autofocus>
     <label for="inputPassword">Password</label>
     <input type="password" name="password" id="inputPassword" class=" mb-3 form-control" required>
-    <button type="submit" class="btn btn-primary">Envoyer</button>
+    <button type="submit" class=" round btn bg-white btn-lg btn-block">Envoyer</button>
 
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}" >
           
+          </div>
      </div>
+
       
     </div>
 
@@ -51,5 +55,15 @@
     #}
 
    
-</form>
+ </form>
 {% endblock %}
+{# 
+<div class=" mt-5 container  p-0 " id='connexion1'>
+    <div class="row ">
+        <div id='login' class=" shadow-lg round mx-auto col-md-6 col-10 p-5 rounded ">
+            <img class='mx-auto d-block mb-5' src="./images/GSB.png" alt="">
+                <button type="button" onclick=window.location.href='{{path('app_login')}}' name="connexionVisiteur" id="" class=" round btn bg-white btn-lg btn-block">Se connecter</button>
+        </div>
+
+    </div>
+</div> #}

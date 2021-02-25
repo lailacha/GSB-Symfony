@@ -60,6 +60,33 @@
  {% block javascripts %}
 <script>
 
+function reporter(elem){
+
+        let rep = confirm("Voulez vous reporter ce frais ?")
+        if (elem.checked == true && rep == true) {
+            let  idfrais = elem.dataset.frais;  
+            var _token =  elem.dataset.token;
+             let url = '{{path('lignefraishorsforfait_report', { 'id': 0 })}}';
+            url = url.replace("0",idfrais);
+        
+       $.ajax({ 
+                    url: url,
+                    type: 'POST',
+                     data    :   {
+                            '_token': 
+                            _token
+                        },
+                    success: function(result) {
+                        alert(result.rep);
+                     elem.closest('tr').remove();
+                    },
+                    error: function(e){
+                        console.log(e.responseText);
+                    }
+                }); 
+        } 
+    }
+
     getMois = () => {
        {
            $.ajax({
@@ -85,6 +112,37 @@
 
        } }
 
+         function checkValidation(elem) {
+        var _token =  elem.dataset.token;
+       let idForfait = elem.dataset.idfrais;
+       let url = '{{path('lignefraishorsforfait_delete', { 'id': 0}) }}';
+            url = url.replace("0",idForfait);
+        let rep = confirm("Voulez vous supprimer ce frais ?")
+        if (elem.checked == true && rep == true) {
+        
+        $.ajax({ 
+                    url: url,
+                    type: 'POST',
+                     data    :   {
+                            '_token': 
+                            _token
+                        },
+                    success: function(result) {
+                        console.log('Delete');
+                          elem.closest('tr').remove();
+                            
+                    },
+                    error: function(e){
+                        console.log(e.responseText);
+                    }
+                });    
+        } 
+
+
+
+    }
+
+
  getFiche = () => {
        {
            var data = $("#critere").serialize();
@@ -93,7 +151,8 @@
             type: 'POST',
             data: data,
             success: function(data) {
-                document.getElementById('tab-component').innerHTML = data;
+                $("#tab-component").html(data);
+               
                
             },
             error: function(data) {
