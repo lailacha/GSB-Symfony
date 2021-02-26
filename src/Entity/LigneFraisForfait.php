@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\LigneFraisForfaitRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -29,6 +30,10 @@ class LigneFraisForfait
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups({"show_frais"})
+     * @Assert\Type(
+     *     type="integer",
+     *     message="The value {{ value }} is not a valid {{ type }}."
+     * )
      */
     private $quantite;
 

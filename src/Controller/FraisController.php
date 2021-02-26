@@ -25,13 +25,13 @@ class FraisController extends AbstractController
 
     private $ligneFraisForfaitRepository;
     private $fraisForfaitRepository;
-    private $ligneFraisHorsForfaitRepository;
+    private $LignefraishorsforfaitRepository;
 
-    public function __construct(LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $ligneFraisHorsForfaitRepository)
+    public function __construct(LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $LignefraishorsforfaitRepository)
     {
         $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
         $this->fraisForfaitRepository = $fraisForfaitRepository;
-        $this->ligneFraisHorsForfaitRepository = $ligneFraisHorsForfaitRepository;
+        $this->LignefraishorsforfaitRepository = $LignefraishorsforfaitRepository;
     }
 
     /**
@@ -73,7 +73,7 @@ class FraisController extends AbstractController
             'visiteur' => $request->get('visiteur'), "mois" => $request->get('mois')
         ]);
 
-        $fraisHF = $this->ligneFraisHorsForfaitRepository->findBy([
+        $fraisHF = $this->LignefraishorsforfaitRepository->findBy([
             'idvisiteur' => $request->get('visiteur'),
             "mois" => $request->get('mois')
         ]);

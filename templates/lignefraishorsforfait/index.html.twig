@@ -17,16 +17,16 @@
             </tr>
         </thead>
         <tbody>
-        {% for lignefraishorsforfait in lignefraishorsforfaits %}
+        {% for Lignefraishorsforfait in Lignefraishorsforfaits %}
             <tr>
-                <td>{{ lignefraishorsforfait.id }}</td>
-                <td>{{ lignefraishorsforfait.libelle }}</td>
-                <td>{{ lignefraishorsforfait.date ? lignefraishorsforfait.date|date('Y-m-d') : '' }}</td>
-                <td>{{ lignefraishorsforfait.montant }}</td>
-                <td>{{ lignefraishorsforfait.mois }}</td>
+                <td>{{ Lignefraishorsforfait.id }}</td>
+                <td>{{ Lignefraishorsforfait.libelle }}</td>
+                <td>{{ Lignefraishorsforfait.date ? Lignefraishorsforfait.date|date('Y-m-d') : '' }}</td>
+                <td>{{ Lignefraishorsforfait.montant }}</td>
+                <td>{{ Lignefraishorsforfait.mois }}</td>
                 <td>
-                    <a href="{{ path('lignefraishorsforfait_show', {'id': lignefraishorsforfait.id}) }}">show</a>
-                    <a href="{{ path('lignefraishorsforfait_edit', {'id': lignefraishorsforfait.id}) }}">edit</a>
+                    <a href="{{ path('Lignefraishorsforfait_show', {'id': Lignefraishorsforfait.id}) }}">show</a>
+                    <a href="{{ path('Lignefraishorsforfait_edit', {'id': Lignefraishorsforfait.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -37,5 +37,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('lignefraishorsforfait_new') }}">Create new</a>
+    <a href="{{ path('Lignefraishorsforfait_new') }}">Create new</a>
 {% endblock %}

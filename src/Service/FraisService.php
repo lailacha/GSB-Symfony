@@ -15,17 +15,17 @@ class FraisService
 
     private $ligneFraisForfaitRepository;
     private $fraisForfaitRepository;
-    private $ligneFraisHorsForfaitRepository;
+    private $LignefraishorsforfaitRepository;
     private $entityManager;
     private $ficheFraisRepository;
 
-    public function __construct(FicheFraisRepository $ficheFraisRepository, EntityManagerInterface $entityManager, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $ligneFraisHorsForfaitRepository)
+    public function __construct(FicheFraisRepository $ficheFraisRepository, EntityManagerInterface $entityManager, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $LignefraishorsforfaitRepository)
     {
         $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
         $this->entityManager = $entityManager;
         $this->ficheFraisRepository = $ficheFraisRepository;
         $this->fraisForfaitRepository = $fraisForfaitRepository;
-        $this->ligneFraisHorsForfaitRepository = $ligneFraisHorsForfaitRepository;
+        $this->LignefraishorsforfaitRepository = $LignefraishorsforfaitRepository;
     }
 
 
@@ -56,12 +56,12 @@ class FraisService
         }
     }
 
-    public function reportFrais($lignefraishorsforfait)
+    public function reportFrais($Lignefraishorsforfait)
     {
-        $visiteur = $lignefraishorsforfait->getIdvisiteur();
+        $visiteur = $Lignefraishorsforfait->getIdvisiteur();
 
         //on vérifie si il y a déjà une fiche pour le mois suivant
-        $ficheExist = $this->checkIfFicheExist($visiteur, $lignefraishorsforfait->getMois());
+        $ficheExist = $this->checkIfFicheExist($visiteur, $Lignefraishorsforfait->getMois());
 
         //Si elle existe
         if ($ficheExist) {
@@ -105,8 +105,8 @@ class FraisService
             }
 
             //Modification du mois du frais reporté
-           $lignefraishorsforfait->setMois($nextMonth);
-           $this->entityManager->persist($lignefraishorsforfait);
+           $Lignefraishorsforfait->setMois($nextMonth);
+           $this->entityManager->persist($Lignefraishorsforfait);
 
            $this->entityManager->flush();
            

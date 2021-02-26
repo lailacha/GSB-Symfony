@@ -111,19 +111,27 @@ class LigneFraisForfaitController extends AbstractController
      /**
      * @Route("/majFrais", name="ligne_frais_forfait_maj", methods={"POST"})
      */
-    public function majFraisForfait(Request $request)
-    {
-
-        $idVisiteur = $request->request->get('idVisiteur');
+    public function majFraisForfait(Request $request, LigneFraisForfaitRepository $ligneFraisForfaitRepository)
+    {    
        $KeyFrais = $request->request->get('lesFraisForfait');
-       dump($request, $KeyFrais);
-       die();
-    //    foreach ($KeyFrais as $key => $value) {
+       foreach ($KeyFrais as $key => $quantite) {
+        
+         $fraisForfait = $ligneFraisForfaitRepository->findOneBy([
+             'visiteur' => $request->request->get('idVisiteur'),
+             'mois' => $request->request->get('mois'),
+             'fraisForfait' => $key
+         ]);
+        
+         $fraisForfait->setQuantite($quantite);
          
+         $this->entityManager->flush();
+        
+       }
+       $this->addFlash(
+        'notice',
+        'Les frais ont été mis à jour!'
+    );
+       return $this->redirect('/frais/validation');
 
-    //    }
-
-
-        // return response()->with($KeyFrais);
     }
 }

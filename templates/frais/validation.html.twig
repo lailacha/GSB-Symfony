@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+{% for message in app.flashes('notice') %}
+    <div class="flash-notice">
+        {{ message }}
+    </div>
+{% endfor %}
 <div class="container mx-auto round" id='contenu'>
     <div class="row " id='entete2'>
         <div class="col-4">
@@ -66,7 +71,7 @@ function reporter(elem){
         if (elem.checked == true && rep == true) {
             let  idfrais = elem.dataset.frais;  
             var _token =  elem.dataset.token;
-             let url = '{{path('lignefraishorsforfait_report', { 'id': 0 })}}';
+             let url = '{{path('Lignefraishorsforfait_report', { 'id': 0 })}}';
             url = url.replace("0",idfrais);
         
        $.ajax({ 
@@ -115,7 +120,7 @@ function reporter(elem){
          function checkValidation(elem) {
         var _token =  elem.dataset.token;
        let idForfait = elem.dataset.idfrais;
-       let url = '{{path('lignefraishorsforfait_delete', { 'id': 0}) }}';
+       let url = '{{path('Lignefraishorsforfait_delete', { 'id': 0}) }}';
             url = url.replace("0",idForfait);
         let rep = confirm("Voulez vous supprimer ce frais ?")
         if (elem.checked == true && rep == true) {
