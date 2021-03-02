@@ -14,7 +14,7 @@ Un comptable peut:
 -Voir les fiches de frais ✔️
 -Supprimer les frais  ✔️
 -Reporter les frais ✔️
--Modifier les frais forfait ⏳
+-Modifier les frais forfait ✔️
 -Modifier le statut de la fiche (mise en paiement/ remboursée/ en cours / cloturée) ❌
 
 
