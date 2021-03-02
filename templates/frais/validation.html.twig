@@ -65,6 +65,25 @@
  {% block javascripts %}
 <script>
 
+
+function majFiche()
+{  
+ var data = $("#form-fraisf").serialize();
+           $.ajax({
+            url: '{{path("ligne_frais_forfait_maj")}}',
+            type: 'POST',
+            data: data,
+            success: function(data) {
+                alert('frais modifié!')                              
+            },
+            error: function(data) {
+                alert('Récupération des données impossible');
+            }
+        });
+
+       } 
+
+
 function reporter(elem){
 
         let rep = confirm("Voulez vous reporter ce frais ?")

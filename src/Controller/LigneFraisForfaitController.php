@@ -113,25 +113,30 @@ class LigneFraisForfaitController extends AbstractController
      */
     public function majFraisForfait(Request $request, LigneFraisForfaitRepository $ligneFraisForfaitRepository)
     {    
-       $KeyFrais = $request->request->get('lesFraisForfait');
-       foreach ($KeyFrais as $key => $quantite) {
-        
-         $fraisForfait = $ligneFraisForfaitRepository->findOneBy([
-             'visiteur' => $request->request->get('idVisiteur'),
-             'mois' => $request->request->get('mois'),
-             'fraisForfait' => $key
-         ]);
-        
-         $fraisForfait->setQuantite($quantite);
-         
-         $this->entityManager->flush();
-        
-       }
-       $this->addFlash(
-        'notice',
-        'Les frais ont été mis à jour!'
-    );
-       return $this->redirect('/frais/validation');
+        if ($this->isCsrfTokenValid('maj', $request->request->get('_token'))) {
 
-    }
-}
+             $KeyFrais = $request->request->get('lesFraisForfait');
+             foreach ($KeyFrais as $key => $quantite) {
+              
+               $fraisForfait = $ligneFraisForfaitRepository->findOneBy([
+                   'visiteur' => $request->request->get('idVisiteur'),
+                   'mois' => $request->request->get('mois'),
+                   'fraisForfait' => $key
+               ]);
+               $fraisForfait->setQuantite($quantite);
+               $this->entityManager->flush();
+              
+             }
+
+          return $this->json(["rep" => "Frais modifié!"], 200, [], []);
+        }
+               return $this->json(["rep" => "Erreur de Token"], 400, [], []);
+
+
+          }        
+        
+        }
+            
+     
+      
+

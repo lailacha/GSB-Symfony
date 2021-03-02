@@ -6,9 +6,10 @@ use App\Entity\Visiteur;
 use App\Entity\LigneFraisForfait;
 use App\Repository\VisiteurRepository;
 use App\Repository\FicheFraisRepository;
-
+use App\Service\FraisService;
 use App\Repository\FraisForfaitRepository;
 use App\Repository\LigneFraisHFRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,18 @@ class FraisController extends AbstractController
     private $ligneFraisForfaitRepository;
     private $fraisForfaitRepository;
     private $LignefraishorsforfaitRepository;
+    private $fraisSevice;
+    private $ficheFraisRepository;
+    private $entityManager;
 
-    public function __construct(LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $LignefraishorsforfaitRepository)
+    public function __construct(EntityManagerInterface $entityManager, FicheFraisRepository $ficheFraisRepository, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $LignefraishorsforfaitRepository, FraisService $fraisService)
     {
         $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
         $this->fraisForfaitRepository = $fraisForfaitRepository;
         $this->LignefraishorsforfaitRepository = $LignefraishorsforfaitRepository;
+        $this->fraisService = $fraisService;
+        $this->ficheFraisRepository = $ficheFraisRepository;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -64,22 +71,53 @@ class FraisController extends AbstractController
 
     /**
      * @Route("/frais/fiche", name="sendFiche")
+     * @param Request $request
+     * @param VisiteurRepository $visiteurRepository
+     * @return Response
      */
-    public function sendFiche(Request $request)
+    public function sendFiche(Request $request, VisiteurRepository $visiteurRepository)
     {
+
+        $visiteur = $visiteurRepository->find($request->get('visiteur'));
+        $mois = $request->get('mois');
 
 
         $fraisF = $this->ligneFraisForfaitRepository->findBy([
-            'visiteur' => $request->get('visiteur'), "mois" => $request->get('mois')
+            'visiteur' => $visiteur, "mois" => $mois
         ]);
 
         $fraisHF = $this->LignefraishorsforfaitRepository->findBy([
-            'idvisiteur' => $request->get('visiteur'),
-            "mois" => $request->get('mois')
+            'idvisiteur' => $visiteur,
+            "mois" => $mois
         ]);
 
-        return $this->render('frais/frais-tab.html.twig', compact('fraisF', 'fraisHF'));
+
+        return $this->render('frais/frais-tab.html.twig', compact('fraisF', 'fraisHF', 'visiteur','mois'));
     }
 
-    //TODO écrire un service qui récup les frais HF et FF by mois et idvisiteur
-}
+
+    /**
+     * @Route("/frais/fiche/validate", name="validateFiche")
+     */
+    public function validerFiche(Request $request)
+    {
+        $fiche = $this->ficheFraisRepository->findOneBy([
+            'idvisiteur' => $request->get('idVisiteur'),
+        'mois' => $request->get('mois')
+        ]);
+
+        if (is_null($fiche))
+        {
+            $this->addFlash('error', "La fiche n'existe pas");
+            return $this->redirectToRoute('validateFrais', 404);
+
+        }
+
+        $fiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', 'CL'));
+        $this->entityManager->persist($fiche);
+        $this->entityManager->flush();
+        $this->addFlash('sucess', 'Super le frais est enregistré!');
+        return $this->redirectToRoute('validateFrais');
+
+    }
+    }

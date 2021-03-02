@@ -9,6 +9,14 @@ body {
     height: 100%;
   }
 
+.flash-message{
+  width: 80%;
+  background-color: white;
+  border-radius: 20px;
+  text-align: center;
+}
+
+
   body {
     min-height: 100%;
     margin: 0;

@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+   {% for message in app.flashes('notice') %}
+    <div class="flash-notice mx-auto">
+       <h1>{{ message }} </h1> 
+    </div>
+{% endfor %}
+{% endblock %}
