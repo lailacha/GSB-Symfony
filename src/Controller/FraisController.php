@@ -20,6 +20,9 @@ use Symfony\Component\Validator\Constraints\Json;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * @Route("admin")
+ */
 class FraisController extends AbstractController
 {
 
@@ -120,4 +123,39 @@ class FraisController extends AbstractController
         return $this->redirectToRoute('validateFrais');
 
     }
+
+
+    /**
+     * @Route("/frais/fiche/paiement", name="paiement_action")
+     */
+    public function actionPaiement(Request $request)
+    {
+        $fiche = $this->ficheFraisRepository->findOneBy([
+            'idvisiteur' => $request->get('idVisiteur'),
+            'mois' => $request->get('mois')
+        ]);
+
+        if (is_null($fiche))
+        {
+            $this->addFlash('error', "La fiche n'existe pas");
+            return $this->redirectToRoute('validateFrais', 404);
+        }
+
+        if ($fiche->getIdetat() === "VA")
+        $fiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', 'RB'));
+        else
+            if ($fiche->getIdetat()==="CL")
+            {
+                $fiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', 'VA'));
+
+            }
+
+        $this->entityManager->persist($fiche);
+        $this->entityManager->flush();
+        $this->addFlash('sucess', 'Super le frais a été modifié!');
+        $this->redirect($this->Session->read('referer'));
+        $this->Session->delete('referer');
+    }
+
+
     }

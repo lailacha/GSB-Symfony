@@ -15,11 +15,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Fichefrais
 {
+
+    /**
+     * @var int
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     */
+    private $id;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
-     * @ORM\Id
+     * @ORM\Column(name="mois", type="string", length=6, nullable=false, unique=true, options={"fixed"=true})
      * @ORM\GeneratedValue(strategy="NONE")
      * @Groups({"fiche:mois"})
      */
@@ -59,7 +66,6 @@ class Fichefrais
     /**
      * @var \Visiteur
      *
-     * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\OneToOne(targetEntity="Visiteur")
      * @ORM\JoinColumns({
@@ -132,6 +138,11 @@ class Fichefrais
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->mois;
+    }
+
     public function getIdetat()
     {
         return $this->idetat;
@@ -181,5 +192,18 @@ class Fichefrais
         }
 
         return $this;
+    }
+
+    public function getFormatedMonth()
+    {
+        $mois = $this->mois;
+        $numAnnee = substr($mois, 0, 4);
+        $numMois = substr($mois, 4, 2);
+        return $numAnnee . '/' . $numMois;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }

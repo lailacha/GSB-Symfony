@@ -1,0 +1,94 @@
+{% extends 'partials/container.html.twig' %}
+
+{% block title %}Mises en paiement  <br>des fiches de frais{% endblock %}
+
+{% block content %}
+    <div class="col-12">
+        {{ form_start(form, { 'attr': {'class': 'form-inline'} }) }}
+        <div class="form-group m-2">
+            {{ form_label(form.idvisiteur, 'Visiteur', { 'label_attr': {'class': 'mr-2'} }) }}
+            {{ form_widget(form.idvisiteur,) }}
+        </div>
+        <div class="form-group m-2">
+            {{ form_label(form.mois, 'Mois', { 'label_attr': {'class': 'mr-2'} }) }}
+            {{ form_widget(form.mois) }}
+        </div>
+        <div class="form-group m-2">
+
+            {{ form_label(form.mois, 'Etat', { 'label_attr': {'class': 'mr-2'} }) }}
+            {{ form_widget(form.idetat) }}
+            {{ form_widget(form.save) }}
+
+        </div>
+        {{ form_end(form) }}
+    </div>
+
+    <div class="my-auto col bg-white p-2  m-2 round ">
+        <table class="table table-light">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Visiteur</th>
+                <th>Nbjustificatifs</th>
+                <th>Montantvalide</th>
+                <th>Date modif</th>
+                <th>Etat</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for fichefrai in fichefrais %}
+                <tr>
+                    <td>{{ fichefrai.getFormatedMonth() }}</td>
+                    <td>{{ fichefrai.idvisiteur.nom }}</td>
+
+                    <td>{{ fichefrai.nbjustificatifs }}</td>
+                    <td>{{ fichefrai.montantvalide }}</td>
+                    <td>{{ fichefrai.datemodif ? fichefrai.datemodif|date('Y-m-d') : '' }}
+                    </td>
+                    <td>{{ fichefrai.idetat.libelle }}</td>
+
+                    <td>
+                        <a href="{{ path('fichefrais_show', {'id': fichefrai.id}) }}"><i class="fa fa-eye"></i></a>
+                        {%  if (fichefrai.idetat.id is same as "RB") %}
+                        <button onclick="actionPaiement('/fichefrais/paiement/{{ fichefrai.id }}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' > Indiquer comme remboursée</button>
+                            {% elseif (fichefrai.idetat.id is same as "CL") %}
+                                <button onclick="actionPaiement('/fichefrais/paiement/{{ fichefrai.id }}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' > Valider le paiement</button>
+
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="navigation">
+            {{ knp_pagination_render(fichefrais) }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function actionPaiement(url)
+        {
+                let rep = confirm("Voulez vous changer l'état de paiement de ce frais ?")
+                if ( rep == true) {
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        success: function (result) {
+                            window.location.reload();
+                        },
+                        error: function (e) {
+                            console.log(e.responseText);
+                        }
+                    });
+                }
+
+        }
+    </script>
+{% endblock %}

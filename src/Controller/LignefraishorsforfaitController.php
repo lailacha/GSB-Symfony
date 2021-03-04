@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/Lignefraishorsforfait")
+ * @Route("admin/Lignefraishorsforfait")
  */
 class LignefraishorsforfaitController extends AbstractController
 {

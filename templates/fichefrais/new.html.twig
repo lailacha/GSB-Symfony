@@ -1,0 +1,13 @@
+{% extends 'partials/container.html.twig' %}
+
+{% block title %}Ma fiche de frais du {{ 'now'|date('m -Y') }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-12">
+        {{ include('fichefrais/_form.html.twig') }}
+
+    </div>
+
+{% endblock %}
