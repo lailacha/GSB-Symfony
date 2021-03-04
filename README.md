@@ -21,5 +21,5 @@ Un comptable peut:
 ⚠️ Ici on ne gère que la partie du comptable.
 
 Pour se connecter en tant que visiteur
-login: visiteur
-mdp: visiteur
+login: visiteurr
+mdp: visiteur76
