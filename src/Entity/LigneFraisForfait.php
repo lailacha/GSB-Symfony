@@ -38,7 +38,7 @@ class LigneFraisForfait
     private $quantite;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Visiteur::class, inversedBy="fraisforfait")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="fraisforfait")
      * @ORM\JoinColumn(nullable=false)
      * 
      */
@@ -81,12 +81,12 @@ class LigneFraisForfait
         return $this;
     }
 
-    public function getVisiteur(): ?Visiteur
+    public function getVisiteur(): ?User
     {
         return $this->visiteur;
     }
 
-    public function setVisiteur(?Visiteur $visiteur): self
+    public function setVisiteur(?User $visiteur): self
     {
         $this->visiteur = $visiteur;
 

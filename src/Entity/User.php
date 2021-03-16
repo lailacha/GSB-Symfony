@@ -5,19 +5,31 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Table(name="`users`")
+ * @ORM\Table(name="`Users`")
  */
 class User implements UserInterface
 {
     /**
+     * @var string
+     *
+     * @ORM\Column(name="id", type="string", length=4, nullable=false, options={"fixed"=true})
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @Groups({"fiche:mois"})
      */
     private $id;
+
+    /**
+     * @param string $id
+     */
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
@@ -25,17 +37,34 @@ class User implements UserInterface
     private $login;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(name="roles", type="json")
      */
     private $roles = [];
 
     /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @var string|null
+     *
+     * @ORM\Column(name="nom", type="string", length=30, nullable=true, options={"fixed"=true})
      */
-    private $password;
-
      private $nom;
+
+    /**
+     * @return string|null
+     */
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    /**
+     * @param string|null $nom
+     * @return User
+     */
+    public function setNom(?string $nom)
+    {
+        $this->nom = $nom;
+        return $this;
+    }
 
     /**
      * @var string|null
@@ -54,9 +83,9 @@ class User implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="mdp", type="string", length=20, nullable=true, options={"fixed"=true})
+     * @ORM\Column(name="mdp", type="string", nullable=true, options={"fixed"=true})
      */
-    private $mdp;
+    private $password;
 
     /**
      * @var string|null
@@ -87,7 +116,7 @@ class User implements UserInterface
     private $dateembauche;
 
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }
@@ -157,6 +186,11 @@ class User implements UserInterface
     public function getSalt(): ?string
     {
         return null;
+    }
+
+    public function __toString(): string
+    {
+        return $this->id;
     }
 
     /**

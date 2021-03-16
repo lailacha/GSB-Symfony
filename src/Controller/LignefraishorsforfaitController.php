@@ -2,12 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Etat;
-use App\Entity\Fichefrais;
 use App\Service\FraisService;
-use Doctrine\ORM\EntityManager;
-use App\Entity\LigneFraisForfait;
-use App\Repository\EtatRepository;
 use App\Entity\Lignefraishorsforfait;
 use App\Form\LignefraishorsforfaitType;
 use App\Repository\FicheFraisRepository;
@@ -17,11 +12,12 @@ use App\Repository\LigneFraisHFRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\LigneFraisForfaitRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("admin/Lignefraishorsforfait")
+ * @Route("/lignefraishorsforfait")
  */
 class LignefraishorsforfaitController extends AbstractController
 {
@@ -29,90 +25,90 @@ class LignefraishorsforfaitController extends AbstractController
 
     private $ligneFraisForfaitRepository;
     private $fraisForfaitRepository;
-    private $LignefraishorsforfaitRepository;
+    private $ligneFraisHorsForfaitRepository;
     private $entityManager;
     private $ficheFraisRepository;
 
-    public function __construct(FicheFraisRepository $ficheFraisRepository, EntityManagerInterface $entityManager, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $LignefraishorsforfaitRepository)
+    public function __construct(FicheFraisRepository $ficheFraisRepository, EntityManagerInterface $entityManager, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $ligneFraisHorsForfaitRepository)
     {
         $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
         $this->entityManager = $entityManager;
         $this->ficheFraisRepository = $ficheFraisRepository;
         $this->fraisForfaitRepository = $fraisForfaitRepository;
-        $this->LignefraishorsforfaitRepository = $LignefraishorsforfaitRepository;
+        $this->ligneFraisHorsForfaitRepository = $ligneFraisHorsForfaitRepository;
     }
 
     /**
-     * @Route("/", name="Lignefraishorsforfait_index", methods={"GET"})
+     * @Route("/", name="lignefraishorsforfait_index", methods={"GET"})
      */
     public function index(LigneFraisHFRepository $ligneFraisHFRepository): Response
     {
-        return $this->render('Lignefraishorsforfait/index.html.twig', [
-            'Lignefraishorsforfaits' => $ligneFraisHFRepository->findAll(),
+        return $this->render('lignefraishorsforfait/index.html.twig', [
+            'lignefraishorsforfaits' => $ligneFraisHFRepository->findAll(),
         ]);
     }
 
     /**
-     * @Route("/new", name="Lignefraishorsforfait_new", methods={"GET","POST"})
+     * @Route("/new", name="lignefraishorsforfait_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
-        $Lignefraishorsforfait = new Lignefraishorsforfait();
-        $form = $this->createForm(LignefraishorsforfaitType::class, $Lignefraishorsforfait);
+        $lignefraishorsforfait = new Lignefraishorsforfait();
+        $form = $this->createForm(LignefraishorsforfaitType::class, $lignefraishorsforfait);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($Lignefraishorsforfait);
+            $entityManager->persist($lignefraishorsforfait);
             $entityManager->flush();
 
-            return $this->redirectToRoute('Lignefraishorsforfait_index');
+            return $this->redirectToRoute('lignefraishorsforfait_index');
         }
 
-        return $this->render('Lignefraishorsforfait/new.html.twig', [
-            'Lignefraishorsforfait' => $Lignefraishorsforfait,
+        return $this->render('lignefraishorsforfait/new.html.twig', [
+            'lignefraishorsforfait' => $lignefraishorsforfait,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/{id}", name="Lignefraishorsforfait_show", methods={"GET"})
+     * @Route("/{id}", name="lignefraishorsforfait_show", methods={"GET"})
      */
-    public function show(Lignefraishorsforfait $Lignefraishorsforfait): Response
+    public function show(Lignefraishorsforfait $lignefraishorsforfait): Response
     {
-        return $this->render('Lignefraishorsforfait/show.html.twig', [
-            'Lignefraishorsforfait' => $Lignefraishorsforfait,
+        return $this->render('lignefraishorsforfait/show.html.twig', [
+            'lignefraishorsforfait' => $lignefraishorsforfait,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="Lignefraishorsforfait_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="lignefraishorsforfait_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Lignefraishorsforfait $Lignefraishorsforfait): Response
+    public function edit(Request $request, Lignefraishorsforfait $lignefraishorsforfait): Response
     {
-        $form = $this->createForm(LignefraishorsforfaitType::class, $Lignefraishorsforfait);
+        $form = $this->createForm(LignefraishorsforfaitType::class, $lignefraishorsforfait);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('Lignefraishorsforfait_index');
+            return $this->redirectToRoute('lignefraishorsforfait_index');
         }
 
-        return $this->render('Lignefraishorsforfait/edit.html.twig', [
-            'Lignefraishorsforfait' => $Lignefraishorsforfait,
+        return $this->render('lignefraishorsforfait/edit.html.twig', [
+            'lignefraishorsforfait' => $lignefraishorsforfait,
             'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/fraisHF/delete/{id}", name="Lignefraishorsforfait_delete", methods={"POST"})
+     * @Route("/fraisHF/delete/{id}", name="lignefraishorsforfait_delete", methods={"POST"})
      */
-    public function delete(Request $request, Lignefraishorsforfait $Lignefraishorsforfait): Response
+    public function delete(Request $request, Lignefraishorsforfait $lignefraishorsforfait): Response
     {
         if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($Lignefraishorsforfait);
+            $entityManager->remove($lignefraishorsforfait);
             $entityManager->flush();
             return $this->json(["rep" => "reussi"], 200, [], []);
         } else
@@ -120,15 +116,31 @@ class LignefraishorsforfaitController extends AbstractController
     }
 
     /**
-     * @Route("/fraisHF/report/{id}", name="Lignefraishorsforfait_report", methods={"POST"})
+     * @Route("/fraisHF/report/{id}", name="lignefraishorsforfait_report", methods={"POST"})
      */
-    public function reportFrais(Request $request, Lignefraishorsforfait $Lignefraishorsforfait, FraisService $fraisService)
+    public function reportFrais(Request $request, Lignefraishorsforfait $lignefraishorsforfait, FraisService $fraisService)
     {
-      if ($this->isCsrfTokenValid('report', $request->request->get('_token'))) {
+        $visiteur = $lignefraishorsforfait->getIdvisiteur()->getId();
 
-           $rep = $fraisService->reportFrais($Lignefraishorsforfait);
+        if ($this->isCsrfTokenValid('report', $request->request->get('_token'))) {
+            $ficheExist = $fraisService->checkIfFicheExist($visiteur, $lignefraishorsforfait->getMois());
+            if ($ficheExist) {
+
+                $this->entityManager->remove($lignefraishorsforfait);
+                $this->entityManager->flush();
+                $lastMonth = $this->ficheFraisRepository->getLastMonthByVisiteur($visiteur);
+                $lastFiche = $this->ficheFraisRepository->findBy([
+                    'idvisiteur' => $visiteur,
+                    'mois' => $lastMonth,
+                ]);
+
+                $rep = 'Super';
+            } else {
+                $rep = 'Impossible de cloturer la fiche';
+            }
+
             return $this->json(["rep" => $rep], 200, [], []);
         } else
-            return $this->json(["rep" => "Erreur de Token"], 400, [], []);
+            return $this->json(["rep" => "non"], 400, [], []);
     }
 }

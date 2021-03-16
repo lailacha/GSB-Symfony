@@ -38,6 +38,10 @@ class Etat
         return $this->libelle;
     }
 
+    public function __toString(): string
+    {
+        return $this->id;
+    }
     public function setLibelle(?string $libelle): self
     {
         $this->libelle = $libelle;

@@ -50,10 +50,10 @@
 
                     <td>
                         <a href="{{ path('fichefrais_show', {'id': fichefrai.id}) }}"><i class="fa fa-eye"></i></a>
-                        {%  if (fichefrai.idetat.id is same as "RB") %}
-                        <button onclick="actionPaiement('/fichefrais/paiement/{{ fichefrai.id }}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' > Indiquer comme remboursée</button>
+                        {%  if (fichefrai.idetat.id is same as "VA") %}
+                            <button onclick="actionPaiement('{{path('fiche_frais_paiement', { 'id': fichefrai.id })}}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' >Indiquer comme remboursé </button>
                             {% elseif (fichefrai.idetat.id is same as "CL") %}
-                                <button onclick="actionPaiement('/fichefrais/paiement/{{ fichefrai.id }}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' > Valider le paiement</button>
+                                <button onclick="actionPaiement('{{path('fiche_frais_paiement', { 'id': fichefrai.id })}}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' > Valider le paiement</button>
 
                         {% endif %}
                     </td>

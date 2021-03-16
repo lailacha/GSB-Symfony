@@ -10,8 +10,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Visiteur
  *
- * @ORM\Table(name="Visiteur")
- * @ORM\Entity(repositoryClass="App\Repository\VisiteurRepository")
+ * @ORM\Table(name="Users")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class Visiteur
 {
@@ -211,12 +211,37 @@ class Visiteur
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->id;
+    }
+
     public function removeFrai(LigneFraisForfait $fraisForfait): self
     {
         if ($this->frais->removeElement($fraisForfait)) {
             // set the owning side to null (unless already changed)
             if ($fraisForfait->getVisiteur() === $this) {
                 $fraisForfait->setVisiteur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LigneFraisForfait[]
+     */
+    public function getFraisforfait(): Collection
+    {
+        return $this->fraisforfait;
+    }
+
+    public function removeFraisforfait(LigneFraisForfait $fraisforfait): self
+    {
+        if ($this->fraisforfait->removeElement($fraisforfait)) {
+            // set the owning side to null (unless already changed)
+            if ($fraisforfait->getVisiteur() === $this) {
+                $fraisforfait->setVisiteur(null);
             }
         }
 

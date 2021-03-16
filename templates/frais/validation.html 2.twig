@@ -1,21 +1,10 @@
-{% extends 'base.html.twig' %}
-{% block body %}
-<div class="container mx-auto round" id='contenu'>
-    <div class="row " id='entete2'>
-        <div class="col-4">
-            <a href="index.php
-            "><img src="{{asset('images/GSB.png')}}" alt="logo"></a>
+{% extends 'partials/container.html.twig' %}
 
-        </div>
-        <div class="col-8 d-flex justify-content-center">
-            <h1 class="text-white  my-auto ">Valider fiche de frais</h1>
-        </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-4">
+{% block title %}Valider les fiches{% endblock %}
 
-        </div>
-        <div class="col-8">
+{% block content %}
+
+        <div class="col-8 offset-4">
 
             <div id="criteresRecherche">
                 <form method='POST' id="critere" action="{{path('sendFiche')}}">
@@ -23,13 +12,13 @@
 
                         <label for="visiteur">
                             <h4 class="text-white">Visiteur :</h4>
-                        </label> 
-                        <select class="form-control" name="visiteur" id="visiteur" onchange="getMois()"> 
-                        <option value="">Veuillez selectionner un visiteur</option>                      
+                        </label>
+                        <select class="form-control" name="visiteur" id="visiteur" onchange="getMois()">
+                        <option value="">Veuillez selectionner un visiteur</option>
                             {% for visiteur in visiteurs %}
               <option value="{{visiteur.id}}" >{{visiteur.nom}} </option>
-                              
-                             {% endfor %}      
+
+                             {% endfor %}
                         </select>
                         <label class="" for="mois">
                             <h4 class=" ml-4 mr-2 text-white">
@@ -60,13 +49,32 @@
  {% block javascripts %}
 <script>
 
+
+function majFiche()
+{  
+ var data = $("#form-fraisf").serialize();
+           $.ajax({
+            url: '{{path("ligne_frais_forfait_maj")}}',
+            type: 'POST',
+            data: data,
+            success: function(data) {
+                alert('frais modifié!')                              
+            },
+            error: function(data) {
+                alert('Récupération des données impossible');
+            }
+        });
+
+       } 
+
+
 function reporter(elem){
 
         let rep = confirm("Voulez vous reporter ce frais ?")
         if (elem.checked == true && rep == true) {
             let  idfrais = elem.dataset.frais;  
             var _token =  elem.dataset.token;
-             let url = '{{path('lignefraishorsforfait_report', { 'id': 0 })}}';
+             let url = '{{path('Lignefraishorsforfait_report', { 'id': 0 })}}';
             url = url.replace("0",idfrais);
         
        $.ajax({ 
@@ -77,18 +85,14 @@ function reporter(elem){
                             _token
                         },
                     success: function(result) {
-                        console.log('Report');
+                        alert(result.rep);
+                     elem.closest('tr').remove();
                     },
                     error: function(e){
                         console.log(e.responseText);
                     }
-                });
-
-  
-             elem.closest('tr').style.backgroundColor = "orange";
-        } else {
-             elem.closest('tr').style.backgroundColor = "";
-        }
+                }); 
+        } 
     }
 
     getMois = () => {
@@ -119,7 +123,7 @@ function reporter(elem){
          function checkValidation(elem) {
         var _token =  elem.dataset.token;
        let idForfait = elem.dataset.idfrais;
-       let url = '{{path('lignefraishorsforfait_delete', { 'id': 0}) }}';
+       let url = '{{path('Lignefraishorsforfait_delete', { 'id': 0}) }}';
             url = url.replace("0",idForfait);
         let rep = confirm("Voulez vous supprimer ce frais ?")
         if (elem.checked == true && rep == true) {
@@ -133,18 +137,14 @@ function reporter(elem){
                         },
                     success: function(result) {
                         console.log('Delete');
+                          elem.closest('tr').remove();
+                            
                     },
                     error: function(e){
                         console.log(e.responseText);
                     }
-                });
-
-  
-             elem.closest('tr').style.backgroundColor = "#e1ede4";
-             elem.onchange = '';
-        } else {
-             elem.closest('tr').style.backgroundColor = "";
-        }
+                });    
+        } 
 
 
 
@@ -159,7 +159,8 @@ function reporter(elem){
             type: 'POST',
             data: data,
             success: function(data) {
-                document.getElementById('tab-component').innerHTML = data;
+                $("#tab-component").html(data);
+               
                
             },
             error: function(data) {

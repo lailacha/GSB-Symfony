@@ -1,6 +1,20 @@
 {{ form_start(form) }}
-    {{ form_row(form.name) }}
+<h3>Frais forfaitisés</h3>
+    {{ form_row(form.forfaitEtape) }}
+    {{ form_row(form.forfaitNuit) }}
 
-
+    {{ form_row(form.forfaitRepas) }}
+    {{ form_row(form.forfaitKilometre) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+{{ form_start(formFraisHF) }}
+<h3>Ajout d'un frais Hors forfait</h3>
+{{ form_row(formFraisHF.libelle) }}
+    {{ form_row(formFraisHF.date) }}
+
+    {{ form_row(formFraisHF.montant) }}
+<button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(formFraisHF) }}
+
+<h4>Mes frais enregistrés</h4>

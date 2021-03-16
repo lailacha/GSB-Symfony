@@ -44,10 +44,10 @@ class Lignefraishorsforfait
     private $montant;
 
     /**
-     * @var \Visiteur
+     * @var \User
      *
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Visiteur")
+     * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
      * })

@@ -10,10 +10,12 @@ use App\Form\FicheType;
 use App\Repository\FicheFraisRepository;
 use App\Repository\LigneFraisForfaitRepository;
 use App\Repository\LigneFraisHFRepository;
+use App\Service\FraisService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -64,15 +66,45 @@ class FichefraisController extends AbstractController
     /**
      * @Route("/new", name="fichefrais_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, FraisService $fraisService): Response
     {
-       // $defaultData = ['message' => 'Type your message here'];
+
+       // $user = $this->getUser()->getId();
+        $user = $this->entityManager->getReference('App\Entity\User', $this->getUser()->getId());
+        //On vérifie si une fiche existe déjà sinon on en crée une
+        $mois = $fraisService->getMois(date('d/m/Y'));
+        $ficheExist = $fraisService->checkIfFicheExist($user, $mois);
+        //dd($user, $mois, $ficheExist);
+
+        if($ficheExist)
+        {
+            $fiche = $this->ficheFraisRepository->findOneBy([
+                'idvisiteur' => $visiteur->getId(),
+                'mois' => $mois,
+            ]);
+            dd($fiche);
+            //Si elle existe déjà
+            $defaultData = ['message' => 'Type your message here'];
+        }
+
+       //Sinon
+
+        $newFiche = new Fichefrais();
+        $newFiche->setIdvisiteur($user);
+        $newFiche->setMois($mois);
+        $newFiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', "CR"));
+        $newFiche->setDatemodif(new \DateTime("now"));
+       $this->entityManager->persist($newFiche);
+        $this->entityManager->flush();
+
         $form = $this->createFormBuilder()
-            ->add('name', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('message', TextareaType::class)
+            ->add('forfaitEtape', TextType::class)
+            ->add('forfaitKilometre', TextType::class)
+            ->add('forfaitNuit', TextType::class)
+            ->add('forfaitRepas', TextType::class)
             ->add('send', SubmitType::class)
             ->getForm();
+
 
         $form->handleRequest($request);
 
@@ -80,6 +112,15 @@ class FichefraisController extends AbstractController
             // data is an array with "name", "email", and "message" keys
             $data = $form->getData();
         }
+
+
+        $formFraisHF = $this->createFormBuilder()
+            ->add('libelle', TextType::class)
+            ->add('date', DateType::class)
+            ->add('montant', TextType::class)
+            ->add('send', SubmitType::class)
+            ->getForm();
+
         $fichefrai = new Fichefrais();
        /*
         $form = $this->createForm(FicheType::class, $fichefrai);
@@ -96,6 +137,7 @@ class FichefraisController extends AbstractController
         return $this->render('fichefrais/new.html.twig', [
             'fichefrai' => $fichefrai,
             'form' => $form->createView(),
+            'formFraisHF' => $formFraisHF->createView(),
         ]);
     }
 

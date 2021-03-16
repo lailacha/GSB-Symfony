@@ -15,12 +15,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Fichefrais
 {
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(name="mois", type="string", length=6, nullable=false, unique=true, options={"fixed"=true})
      * @Groups({"fiche:mois"})
      */
     private $mois;
@@ -57,11 +65,10 @@ class Fichefrais
     private $idetat;
 
     /**
-     * @var \Visiteur
+     * @var \User
      *
-     * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Visiteur")
+     * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
      * })
@@ -90,6 +97,12 @@ class Fichefrais
         return $this->mois;
     }
 
+    public function setMois(string $mois)
+    {
+        $this->mois = $mois;
+
+        return $this;
+    }
     public function getNbjustificatifs(): ?int
     {
         return $this->nbjustificatifs;
@@ -126,6 +139,11 @@ class Fichefrais
         return $this;
     }
 
+    public function __toString(): string
+    {
+        return $this->mois;
+    }
+
     public function getIdetat()
     {
         return $this->idetat;
@@ -143,7 +161,7 @@ class Fichefrais
         return $this->idvisiteur;
     }
 
-    public function setIdvisiteur(?Visiteur $idvisiteur): self
+    public function setIdvisiteur(?User $idvisiteur): self
     {
         $this->idvisiteur = $idvisiteur;
 
@@ -175,5 +193,18 @@ class Fichefrais
         }
 
         return $this;
+    }
+
+    public function getFormatedMonth()
+    {
+        $mois = $this->mois;
+        $numAnnee = substr($mois, 0, 4);
+        $numMois = substr($mois, 4, 2);
+        return $numAnnee . '/' . $numMois;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 }

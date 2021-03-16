@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Etat;
 use App\Entity\Fichefrais;
 use App\Entity\FicheSearch;
-use App\Entity\Visiteur;
+use App\Entity\User;
 use App\Repository\FicheFraisRepository;
 use App\Repository\FraisForfaitRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -22,7 +22,7 @@ class FichefraisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('idvisiteur', EntityType::class, ['class' => Visiteur::class,
+            ->add('idvisiteur', EntityType::class, ['class' => User::class,
                 'placeholder' => 'Choisir un visiteur',
                 'required' => false,
                 'attr' => ['class' => 'form-control']
