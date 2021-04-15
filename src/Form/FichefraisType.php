@@ -45,7 +45,7 @@ class FichefraisType extends AbstractType
 
 
             ->add('save', SubmitType::class, ['label' => 'Envoyer',
-                'attr' => ['class' => 'm-4 btn btn-primary']])
+                'attr' => ['class' => 'm-4 btn bg-green-dark text-white']])
 
 
         ;

@@ -1,110 +1,98 @@
 
-<div class="row">
-    <div class="col-4 pr-4 pt-3  pl-4 ">
-        <div id="cardForfait" class="bg-light round container">
-            <h2 class="text-ocean pt-3">
-                Frais Forfait
-            </h2>
-            <form method="POST" action="index.php?uc=adminFrais&action=MAJFiche">
-<pre>
-   
-</pre>
+{% if  not (fraisF is empty) and  not (fraisHF is empty)  %}
+    <div class="row">
+        <div class="col-4 pr-4 pt-3  pl-4 ">
+            <div id="cardForfait" class="bg-light round container">
+                <h2 class="text-ocean pt-3">
+                    Frais Forfait
+                </h2>
+                <form method="POST" id="form-fraisf">
+                    <table class="table table-light">
 
-                <table class="table table-light">
-
-                    <tbody>
+                        <tbody>
                         {% for frais in fraisF %}
-      
+
                             <tr>
                                 <td scope="row">{{frais.fraisforfait.libelle}}</td>
                                 <td id="qtForfait">
-                                    <input type="text" class="form-control text-center" name="lesFraisForfait" id="QuantiteForfait" placeholder="{{frais.quantite}}">
+                                    <input type="text" class="form-control text-center" name="lesFraisForfait[{{frais.fraisforfait.id}}]" id="QuantiteForfait" value="{{frais.quantite}}" >
                                 </td>
 
                             </tr>
                         {% endfor %}
 
-                    </tbody>
-                </table>
-                <input type="hidden" id='idVisiteur' name="idVisiteur" value="{{ fraisHF[0].idvisiteur.id }}">
-                <input type="hidden" id='mois' name="mois" value="<? echo $mois ?>">
-                <button type="submit" class="mt-3 mb-2 btn btn-default bg-dark text-white"> Enregistrer</button>
-            </form>
-        </div>
+                        </tbody>
+                    </table>
+                    <input type="hidden" id='idVisiteur' name="idVisiteur" value="{{ visiteur.id }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('maj')}}">
+                    <input type="hidden" id='mois' name="mois" value="{{ mois }}">
+                    <button type="button" onclick="majFiche()" class="mt-3 mb-2 btn btn-default bg-dark text-white"> Enregistrer</button>
+                </form>
+            </div>
 
-    </div>
-    <div class="col my-auto align-self-end bg-white p-2 ml-5 m-2 round ">
-        <h2 class="grey-text">Fiche frais de {{ fraisHF[0].idvisiteur.nom }}</h2>
-        <br>
-        <h2 class="text-ocean">
-            Frais Hors Forfait
-        </h2>
-         <form method="POST" id="ValiderFiche" action="index.php?uc=adminFrais&action=ValideFiche">
+        </div>~
+        <div class="col my-auto align-self-end bg-white p-2 ml-5 m-2 round ">
+            <h2 class="grey-text">Fiche frais de {{ visiteur.nom}}&nbsp;{{visiteur.prenom }}</h2>
+            <br>~
+            <h2 class="text-ocean">
+                Frais Hors Forfait
+            </h2>
 
-        <table class="table-light">
-            <thead>
+            <table class="table-light">
+                <thead>
                 <tr>
                     <th>Libelle</th>
                     <th>Date</th>
                     <th>Montant</th>
                     <th class="pl-2">
-
-
-
                     </th>
 
                 </tr>
-            </thead>
-           
-            <tbody>
-            {% for fraisHF in fraisHF %}
-                
-         
+                </thead>
+                <tbody>
+                {% for fraisHF in fraisHF %}
                     <tr>
-                      
                         <td scope="row">{{fraisHF.libelle}}</td>
                         <td>{{fraisHF.date |date('d/m/y')}}</td>
                         <td class="p-2">{{fraisHF.montant}}</td>
                         <td class="p-2">
 
-                            <label class="img-fluid img-check" for="<? echo $i ?>">
-                                <i class="fas fa-trash-alt"><input type="checkbox"  data-token="{{csrf_token('delete')}}" data-idfrais= "{{fraisHF.id}}" onchange="checkValidation(this)" class='hidden' name="supprimer" id="<? echo $i ?>" value="suppression"></i>
+                            <label class="img-fluid img-check">
+                                <i class="fas fa-trash-alt"><input type="checkbox"  data-token="{{csrf_token('delete')}}" data-idfrais= "{{fraisHF.id}}" onchange="checkValidation(this)" class='hidden' name="supprimer"  value="suppression"></i>
 
                             </label>
-                            <label class="img-fluid img-check" for="valider">
-                                <i style='color: green;' class="fas fa-check"> <input type="checkbox" onchange="checkValidation(this)" class='hidden' name="valider" id="valider" value="valider"></i>
-
-                            </label>
-                            <label class="img-fluid img-check" for="report<? echo $i ?>">
-                                <i style='color: orange;' class="fas fa-bullhorn"> <input data-frais="{{fraisHF.id}}" data-token="{{csrf_token('report')}}" type="checkbox" onchange="reporter(this)" class='hidden' name="report" id="report<? echo $i ?>" value="report"></i>
+                            <label class="img-fluid img-check">
+                                <i style='color: orange;' class="fas fa-bullhorn"> <input data-frais="{{fraisHF.id}}" data-token="{{csrf_token('report')}}" type="checkbox" onchange="reporter(this)" class='hidden' name="report" value="report"></i>
                             </label>
                         </td>
                     </tr>
-                 {% endfor %}
+                {% endfor %}
 
-            </tbody>
-         
-        </table>
+                </tbody>
+
+            </table>
+        </div>
     </div>
-</div>
 <div class="row">
     <div class="mx-auto d-flex col-5 justify-content-center">
-    <input type="hidden" name="idVisiteur" value="<? echo $idVisiteurFiche ?>">
-                <input type="hidden" name="mois" value="<? echo $mois ?>">
-         <button type="submit" class="mt-3 mb-2 btn btn-default bg-dark text-white" form="ValiderFiche"> Valider la fiche</button>
-</form>
+        <form method="POST" id="ValiderFiche" name="ValiderFiche" action="{{ path('validateFiche') }}">
+            <input type="hidden" name="idVisiteur" value="{{ visiteur.id }}">
+            <input type="hidden" name="mois" value="{{ mois }}">
+            <button type="submit" class="mt-3 mb-2 btn btn-default bg-dark text-white" > Valider la fiche</button>
+        </form>
     </div>
-               
-                    
-             {# <h3>Il n'y a pas de frais encore enregistré!</h3> #}
-                  
-               
-           
+
+    {% else %}
+
+        <h3>Il n'y a pas de frais encore enregistré!</h3>
+    {% endif %}
+
+
 </div>
 
-            {% block javascripts %}           
-<script>
-  
-    
-</script>
-{% endblock %}   
+{% block javascripts %}
+    <script>
+
+
+    </script>
+{% endblock %}

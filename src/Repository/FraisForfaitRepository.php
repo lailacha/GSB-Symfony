@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Fraisforfait;
+use App\Entity\LigneFraisForfait;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,6 +21,21 @@ class FraisForfaitRepository extends ServiceEntityRepository
         parent::__construct($registry, Fraisforfait::class);
     }
 
+    public function initFraisForfait(User $Visiteur, string $mois){
+
+        //Création des frais forfaits
+        $lesFrais = $this->findAll();
+
+        foreach ($lesFrais as $key => $frais) {
+            $newFrais = new LigneFraisForfait();
+            $newFrais->setVisiteur($Visiteur);
+            $newFrais->setMois($mois);
+            $newFrais->setFraisForfait($frais);
+            $this->getEntityManager()->persist($newFrais);
+        }
+
+        $this->getEntityManager()->flush();
+    }
     // /**
     //  * @return Fraisforfait[] Returns an array of Fraisforfait objects
     //  */
@@ -47,4 +64,5 @@ class FraisForfaitRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }

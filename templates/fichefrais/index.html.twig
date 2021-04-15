@@ -41,7 +41,6 @@
                 <tr>
                     <td>{{ fichefrai.getFormatedMonth() }}</td>
                     <td>{{ fichefrai.idvisiteur.nom }}</td>
-
                     <td>{{ fichefrai.nbjustificatifs }}</td>
                     <td>{{ fichefrai.montantvalide }}</td>
                     <td>{{ fichefrai.datemodif ? fichefrai.datemodif|date('Y-m-d') : '' }}
@@ -49,13 +48,26 @@
                     <td>{{ fichefrai.idetat.libelle }}</td>
 
                     <td>
-                        <a href="{{ path('fichefrais_show', {'id': fichefrai.id}) }}"><i class="fa fa-eye"></i></a>
-                        {%  if (fichefrai.idetat.id is same as "VA") %}
-                            <button onclick="actionPaiement('{{path('fiche_frais_paiement', { 'id': fichefrai.id })}}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' >Indiquer comme remboursé </button>
-                            {% elseif (fichefrai.idetat.id is same as "CL") %}
-                                <button onclick="actionPaiement('{{path('fiche_frais_paiement', { 'id': fichefrai.id })}}')" style='background-color: rebeccapurple' class=' btn btn-info ml-2' > Valider le paiement</button>
+                        <div class="dropdown">
+                            <button class="btn bg-green-dark text-white dropdown-toggle" type="button" id="dropdownMenuButton"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="{{ path('fichefrais_show', {'id': fichefrai.id}) }}">Voir
+                                    la fiche <i class="fa fa-eye"></i></a>
 
-                        {% endif %}
+                                {% if (fichefrai.idetat.id is same as "VA") %}
+                                    <a class="dropdown-item"
+                                       onclick="actionPaiement('{{ path('fiche_frais_paiement', { 'id': fichefrai.id }) }}')">Rembourser</a>
+                                {% elseif (fichefrai.idetat.id is same as "CL") %}
+
+                                    <a class="dropdown-item"
+                                       onclick="actionPaiement('{{ path('fiche_frais_paiement', { 'id': fichefrai.id }) }}')">Valider
+                                        le paiement</a>
+                                {% endif %}
+                            </div>
+                        </div>
                     </td>
                 </tr>
             {% else %}
@@ -73,21 +85,20 @@
 
 {% block javascripts %}
     <script>
-        function actionPaiement(url)
-        {
-                let rep = confirm("Voulez vous changer l'état de paiement de ce frais ?")
-                if ( rep == true) {
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        success: function (result) {
-                            window.location.reload();
-                        },
-                        error: function (e) {
-                            console.log(e.responseText);
-                        }
-                    });
-                }
+        function actionPaiement(url) {
+            let rep = confirm("Voulez vous changer l'état de paiement de ce frais ?")
+            if (rep === true) {
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (result) {
+                        window.location.reload();
+                    },
+                    error: function (e) {
+                        console.log(e.responseText);
+                    }
+                });
+            }
 
         }
     </script>

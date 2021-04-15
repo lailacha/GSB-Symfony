@@ -6,7 +6,7 @@
 
 <div class="container mt-1 mb-5">
 
-<form method="post">
+<form method="post" action="">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}

@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Users
@@ -12,14 +10,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(name="Users")
  * @ORM\Entity
  */
-class User implements UserInterface
+class Users
 {
     /**
      * @var string
      *
      * @ORM\Column(name="id", type="string", length=4, nullable=false, options={"fixed"=true})
      * @ORM\Id
-     * @Groups({"fiche:mois"})
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
@@ -30,24 +27,6 @@ class User implements UserInterface
      * @ORM\Column(name="nom", type="string", length=30, nullable=true, options={"fixed"=true})
      */
     private $nom;
-
-    /**
-     * @return string|null
-     */
-    public function getNom(): ?string
-    {
-        return $this->nom;
-    }
-
-    /**
-     * @param string|null $nom
-     * @return User
-     */
-    public function setNom(?string $nom): User
-    {
-        $this->nom = $nom;
-        return $this;
-    }
 
     /**
      * @var string|null
@@ -110,84 +89,16 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function getLogin(): ?string
+    public function getNom(): ?string
     {
-        return $this->login;
+        return $this->nom;
     }
 
-    public function setLogin(string $login): self
+    public function setNom(?string $nom): self
     {
-        $this->login = $login;
+        $this->nom = $nom;
 
         return $this;
-    }
-
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->login;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
-    {
-        return (string) $this->mdp;
-    }
-
-    public function setPassword(string $password): self
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Returning a salt is only needed, if you are not using a modern
-     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
-     *
-     * @see UserInterface
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-    public function __toString(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    public function eraseCredentials()
-    {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
     }
 
     public function getPrenom(): ?string
@@ -198,6 +109,18 @@ class User implements UserInterface
     public function setPrenom(?string $prenom): self
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getLogin(): ?string
+    {
+        return $this->login;
+    }
+
+    public function setLogin(?string $login): self
+    {
+        $this->login = $login;
 
         return $this;
     }
@@ -261,4 +184,18 @@ class User implements UserInterface
 
         return $this;
     }
+
+    public function getRoles(): ?array
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+
 }

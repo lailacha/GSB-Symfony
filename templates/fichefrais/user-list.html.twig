@@ -1,0 +1,20 @@
+{% extends 'partials/container.html.twig' %}
+{% block content %}
+
+    <div class="col-6 offset-4 text-white">
+        <h4>Mes fiches de frais</h4>
+        <form action="{{ path('fiche_frais_visiteur')}}">
+        <select class="form-control" name="idfrais" aria-label="Selection des frais">
+            <option selected>Selectionnez une fiche</option>
+
+            {% for fiche in fiches %}
+            <option value="{{ fiche.id }}">{{ fiche.getFormatedMonth(fiche.mois) }}</option>
+
+            {% endfor %}
+        </select>
+        <button class="mt-4 btn bg-green-dark text-white" type="submit">Recuperer les mois</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

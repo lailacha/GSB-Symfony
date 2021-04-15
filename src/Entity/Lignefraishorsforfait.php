@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Lignefraishorsforfait
  *
- * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="Relation", columns={"idVisiteur", "mois"})})
- * @ORM\Entity(repositoryClass="App\Repository\LigneFraisHFRepository")
+ * @ORM\Table(name="LigneFraisHorsForfait", indexes={@ORM\Index(name="Relation", columns={"idVisiteur", "mois"}), @ORM\Index(name="IDX_4C9509AB1D06ADE3", columns={"idVisiteur"})})
+ * @ORM\Entity
  */
 class Lignefraishorsforfait
 {
@@ -24,6 +24,13 @@ class Lignefraishorsforfait
     /**
      * @var string|null
      *
+     * @ORM\Column(name="mois", type="string", length=6, nullable=true, options={"fixed"=true})
+     */
+    private $mois;
+
+    /**
+     * @var string|null
+     *
      * @ORM\Column(name="libelle", type="string", length=100, nullable=true)
      */
     private $libelle;
@@ -35,7 +42,6 @@ class Lignefraishorsforfait
      */
     private $date;
 
-
     /**
      * @var string|null
      *
@@ -44,24 +50,30 @@ class Lignefraishorsforfait
     private $montant;
 
     /**
-     * @var \User
+     * @var User
      *
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
      * })
      */
     private $idvisiteur;
 
-    /**
-     * @ORM\Column(type="string", length=3)
-     */
-    private $mois;
-
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getMois(): ?string
+    {
+        return $this->mois;
+    }
+
+    public function setMois(?string $mois): self
+    {
+        $this->mois = $mois;
+
+        return $this;
     }
 
     public function getLibelle(): ?string
@@ -100,27 +112,17 @@ class Lignefraishorsforfait
         return $this;
     }
 
-    public function getIdvisiteur()
+    public function getIdvisiteur(): ?User
     {
         return $this->idvisiteur;
     }
 
-    public function setIdvisiteur(?Fichefrais $idvisiteur): self
+    public function setIdvisiteur(?User $idvisiteur): self
     {
         $this->idvisiteur = $idvisiteur;
 
         return $this;
     }
 
-    public function getMois(): ?string
-    {
-        return $this->mois;
-    }
 
-    public function setMois(string $mois): self
-    {
-        $this->mois = $mois;
-
-        return $this;
-    }
 }

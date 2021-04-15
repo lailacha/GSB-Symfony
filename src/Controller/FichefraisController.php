@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Fichefrais;
 use App\Entity\FicheSearch;
+use App\Entity\LigneFraisForfait;
+use App\Entity\Lignefraishorsforfait;
 use App\Form\FichefraisType;
 use App\Form\FichesearchType;
 use App\Form\FicheType;
 use App\Repository\FicheFraisRepository;
+use App\Repository\FraisForfaitRepository;
 use App\Repository\LigneFraisForfaitRepository;
 use App\Repository\LigneFraisHFRepository;
 use App\Service\FraisService;
@@ -17,6 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -65,8 +69,14 @@ class FichefraisController extends AbstractController
 
     /**
      * @Route("/new", name="fichefrais_new", methods={"GET","POST"})
+     * @param Request $request
+     * @param FraisService $fraisService
+     * @param LigneFraisForfaitRepository $ligneFraisForfaitRepository
+     * @param FicheFraisRepository $ficheFraisRepository
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
      */
-    public function new(Request $request, FraisService $fraisService): Response
+    public function new(Request $request, FraisService $fraisService, FraisForfaitRepository $fraisForfaitRepository, LigneFraisForfaitRepository $ligneFraisForfaitRepository,LigneFraisHFRepository $lignefraishorsforfaitRepository, FicheFraisRepository $ficheFraisRepository): Response
     {
 
        // $user = $this->getUser()->getId();
@@ -78,71 +88,152 @@ class FichefraisController extends AbstractController
 
         if($ficheExist)
         {
-            $fiche = $this->ficheFraisRepository->findOneBy([
-                'idvisiteur' => $visiteur->getId(),
-                'mois' => $mois,
+//
+//            //Si elle existe déjà
+
+            $forfaitEtape = $ligneFraisForfaitRepository->findOneBy([
+                'visiteur' => $user,
+                'fraisForfait' => 'ETP',
+                'mois' => $mois
             ]);
-            dd($fiche);
-            //Si elle existe déjà
-            $defaultData = ['message' => 'Type your message here'];
+
+
+            $forfaitNuit = $ligneFraisForfaitRepository->findOneBy([
+                'visiteur' => $user,
+                'mois' => $mois,
+                'fraisForfait' => 'NUI'
+            ]);
+
+            $forfaitKilometre = $ligneFraisForfaitRepository->findOneBy([
+                'visiteur' => $user,
+                'mois' => $mois,
+                'fraisForfait' => 'KM'
+            ]);
+
+            $forfaitRepas = $ligneFraisForfaitRepository->findOneBy([
+                'visiteur' => $user,
+                'mois' => $mois,
+                'fraisForfait' => 'REP'
+            ]);
+
+
+
+            //dd($forfaitEtape, $forfaitNuit, $forfaitKilometre, $forfaitRepas);
+
+//
+            $form = $this->createFormBuilder()
+                ->add('ETP', TextType::class, ['label' =>'Forfait étape','attr' => ['class' => 'form-control',  'placeholder'=> $forfaitEtape->getQuantite()]])
+                ->add('NUI', TextType::class , ['label' =>'Forfait nuitée','attr' => ['class' => 'form-control',  'placeholder'=> $forfaitNuit->getQuantite()]])
+                ->add('KM', TextType::class , ['label' =>'Forfait kilomètrage','attr' => ['class' => 'form-control',  'placeholder'=> $forfaitKilometre->getQuantite()]])
+                ->add('REP', TextType::class , ['label' =>'Forfait repas','attr' => ['class' => 'form-control',  'placeholder'=> $forfaitRepas->getQuantite()]])
+                ->add('Envoyer', SubmitType::class , ['attr' => ['class' => 'form-control bg-green-dark text-white mt-3'],
+                    'label' =>'Envoyer'])
+                ->getForm();
+
+
+        }
+        else
+        {
+            //on créé la fiche
+            $newFiche = new Fichefrais();
+            $newFiche->setIdvisiteur($user);
+            $newFiche->setMois($mois);
+            $newFiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', "CR"));
+            $newFiche->setDatemodif(new \DateTime("now"));
+            $this->entityManager->persist($newFiche);
+            $this->entityManager->flush();
+
+            //on initialise ses frais forfaits
+            $fraisForfaitRepository->initFraisForfait($user, $mois);
+
+            $form = $this->createFormBuilder()
+                ->add('ETP', TextType::class, ['label' =>'Forfait étape', 'attr' => ['class' => 'form-control','label' =>'Envoyer' ]])
+                ->add('NUI', TextType::class ,['label' =>'Forfait nuitée','attr' => ['class' => 'form-control']])
+                ->add('KM', TextType::class , ['label' =>'Forfait kilomètre','attr' => ['class' => 'form-control']])
+                ->add('REP', TextType::class , ['label' =>'Forfait repas','attr' => ['class' => 'form-control']])
+                ->add('Envoyer', SubmitType::class , ['attr' => ['class' => 'form-control bg-green-dark text-white mt-3'],
+                    'label' =>'Envoyer'])
+                ->getForm();
+
         }
 
        //Sinon
 
-        $newFiche = new Fichefrais();
-        $newFiche->setIdvisiteur($user);
-        $newFiche->setMois($mois);
-        $newFiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', "CR"));
-        $newFiche->setDatemodif(new \DateTime("now"));
-       $this->entityManager->persist($newFiche);
-        $this->entityManager->flush();
-
-        $form = $this->createFormBuilder()
-            ->add('forfaitEtape', TextType::class)
-            ->add('forfaitKilometre', TextType::class)
-            ->add('forfaitNuit', TextType::class)
-            ->add('forfaitRepas', TextType::class)
-            ->add('send', SubmitType::class)
-            ->getForm();
-
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+
             // data is an array with "name", "email", and "message" keys
             $data = $form->getData();
+
+
+            //ajout des frais forfait en bdd
+            foreach ($data as $key => $value)
+            {
+
+                //si le frais n'existe pas déjà, on le créé
+
+               //Recuperer les frais correspondant
+                $fraisForfait = $ligneFraisForfaitRepository->findOneBy([
+                    'visiteur' => $user,
+                    'mois' => $mois,
+                    'fraisForfait' => $key
+                ]);
+
+                //sinon on le modifiie
+                $fraisForfait->setQuantite($value);
+                $this->entityManager->persist($fraisForfait);
+                $this->entityManager->flush();
+
+
+
+            }
         }
 
 
         $formFraisHF = $this->createFormBuilder()
-            ->add('libelle', TextType::class)
-            ->add('date', DateType::class)
-            ->add('montant', TextType::class)
-            ->add('send', SubmitType::class)
+            ->add('libelle', TextType::class, ['attr' => ['class' => 'form-control']])
+            ->add('montant', TextType::class, ['attr' => ['class' => 'form-control']])
+            ->add('date', DateType::class , ['attr' => ['class' => 'form-control '], 'widget' => 'single_text'])
+            ->add('Envoyer', SubmitType::class, ['attr' => ['class' => 'mt-3 btn bg-green-dark text-white']])
             ->getForm();
 
+        $formFraisHF->handleRequest($request);
+        if ($formFraisHF->isSubmitted() && $formFraisHF->isValid()) {
+
+            // data is an array with "name", "email", and "message" keys
+            $data = $formFraisHF->getData();
+
+            $newFrais = new LigneFraisHorsForfait();
+
+            $newFrais->setIdvisiteur($this->entityManager->getReference('App\Entity\User', $user));
+           $newFrais->setDate($data['date']);
+            $newFrais->setMontant($data['montant']);
+            $newFrais->setLibelle($data['libelle']);
+            $newFrais->setMois($mois);
+            $this->entityManager->persist($newFrais);
+            $this->entityManager->flush();
+
+
+        }
+
+
         $fichefrai = new Fichefrais();
-       /*
-        $form = $this->createForm(FicheType::class, $fichefrai);
-        $form->handleRequest($request);
+        $lesFraisHF = $lignefraishorsforfaitRepository->findBy([
+            'idvisiteur'=> $user,
+            'mois'=> $mois
+        ]);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($fichefrai);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('fichefrais_index');
-        }*/
 
         return $this->render('fichefrais/new.html.twig', [
             'fichefrai' => $fichefrai,
             'form' => $form->createView(),
             'formFraisHF' => $formFraisHF->createView(),
+            'fraisHF' =>$lesFraisHF
         ]);
     }
 
     /**
-     * @Route("/{id}", name="fichefrais_show", methods={"GET"})
+     * @Route("admin/{id}", name="fichefrais_show", methods={"GET"})
      * @param Fichefrais $fichefrai
      * @param LignefraishorsforfaitRepository $LignefraishorsforfaitRepository
      * @param LigneFraisForfaitRepository $ligneFraisForfaitRepository
@@ -218,4 +309,52 @@ class FichefraisController extends AbstractController
         return $this->json(["rep" => "Super"], 200, [], []);
 
     }
+
+
+    /**
+     * @Route("/show/list", name="fiche_frais_month")
+     */
+    public function showVisteurFicheByMonth(FicheFraisRepository $ficheFraisRepository)
+    {
+
+        $fiches = $ficheFraisRepository->findBy(['idvisiteur' => $this->getUser()]);
+
+        return $this->render('fichefrais/user-list.html.twig', compact('fiches'));
+
+    }
+
+    /**
+     * @Route("visiteur/show/fiche", name="fiche_frais_visiteur")
+     */
+    public function showVisiteurFiche(Request $request, FicheFraisRepository $ficheFraisRepository, LigneFraisForfaitRepository $ligneFraisForfaitRepository, LigneFraisHFRepository $lignefraishorsforfaitRepository)
+    {
+       $fichefrai = $ficheFraisRepository->find($request->get('idfrais'));
+
+        $lesfraisF = $ligneFraisForfaitRepository->findBy([
+            'visiteur' => $fichefrai->getIdvisiteur(), "mois" => $fichefrai->getMois()
+        ]);
+
+        $lesfraisHF = $lignefraishorsforfaitRepository->findBy([
+            'idvisiteur' => $fichefrai->getIdvisiteur(), "mois" => $fichefrai->getMois()
+        ]);
+
+        return $this->render('fichefrais/show.html.twig',  compact('fichefrai', 'lesfraisHF', 'lesfraisF'));
+
+    }
+
+
+
+    /**
+     * @Route("menu", name="fiche_frais_menu", methods={"GET"})
+     */
+    public function show_visiteur_menu()
+    {
+
+        return $this->render('visiteur/menu-fiches.html.twig', [
+            'fichefrai' => $fichefrai,
+            'form' => $form->createView(),
+        ]);
+
+    }
+
 }

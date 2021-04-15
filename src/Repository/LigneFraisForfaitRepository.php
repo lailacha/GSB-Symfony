@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\LigneFraisForfait;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,10 +15,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class LigneFraisForfaitRepository extends ServiceEntityRepository
 {
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, LigneFraisForfait::class);
     }
+
+
 
     // /**
     //  * @return LigneFraisForfait[] Returns an array of LigneFraisForfait objects

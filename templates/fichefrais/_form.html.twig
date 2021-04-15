@@ -1,20 +1,104 @@
 {{ form_start(form) }}
-<h3>Frais forfaitisés</h3>
-    {{ form_row(form.forfaitEtape) }}
-    {{ form_row(form.forfaitNuit) }}
 
-    {{ form_row(form.forfaitRepas) }}
-    {{ form_row(form.forfaitKilometre) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
 
-{{ form_start(formFraisHF) }}
-<h3>Ajout d'un frais Hors forfait</h3>
-{{ form_row(formFraisHF.libelle) }}
-    {{ form_row(formFraisHF.date) }}
+<div id="show-visiteur-fiche" class="container mx-auto  rounded-lg p-3">
+    <div class="row justify-content-lg-around">
+        <div class=" flex-column flex w-35 content bg-green-dark  border-25">
 
-    {{ form_row(formFraisHF.montant) }}
-<button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(formFraisHF) }}
+            <h3 class="p-2">Frais forfaitisés</h3>
+            <div class=" flex flex-column p-4 bg-white border-b-25">
+                {{ form_row(form.ETP) }}
+                {{ form_row(form.NUI) }}
 
-<h4>Mes frais enregistrés</h4>
+                {{ form_row(form.REP) }}
+
+                {{ form_row(form.KM) }}
+
+                {{ form_end(form) }}
+
+
+            </div>
+
+        </div>
+        <div class="offset-1 flex w-50 flex-column content  mt-4 ">
+            <div class="bg-green-dark border-25">
+                <h3 class="p-2">Ajout d'un frais Hors forfait</h3>
+
+                <div class="p-4 bg-white border-b-25  ">
+                    {{ form_start(formFraisHF) }}
+                    {{ form_row(formFraisHF.libelle) }}
+
+                    {{ form_row(formFraisHF.montant) }}
+
+                    {{ form_end(formFraisHF) }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="row justify-content-center">
+        <div class="content w-75   bg-green-dark mt-5  border-25">
+            <h3 class="p-2 text-center">Mes frais hors forfaits</h3>
+            <div class="bg-white p-4 border-b-25  ">
+                <table>
+                    <tr>
+                        <th>Libelle <i class="fa fa-tag"></i></th>
+                        <th>Date <i class="fa fa-calendar"></i></th>
+                        <th>Montant <i class="fa fa-money"></i></th>
+                        <th>Action <i class="fa fa-bolt"></i></th>
+
+                    </tr>
+
+                    <tbody>
+                    {% for frais in fraisHF %}
+                        <tr>
+                            <td>{{ frais.libelle }}</td>
+                            <td>{{ frais.date |date('d/m/Y') }}</td>
+                            <td>{{ frais.montant }}</td>
+                            <td><i data-token="{{csrf_token('delete')}}" data-idfrais= "{{frais.id}}" onclick="checkValidation(this)" class="fa fa-trash"></i></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+{% block javascripts %}
+    <script>
+        function checkValidation(elem) {
+            var _token = elem.dataset.token;
+            let idForfait = elem.dataset.idfrais;
+            let url = '{{ path('lignefraishorsforfait_delete', { 'id': 0}) }}';
+            url = url.replace("0", idForfait);
+            let rep = confirm("Voulez vous supprimer ce frais ?")
+            if (rep == true) {
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: {
+                        '_token':
+                        _token
+                    },
+                    success: function (result) {
+                        console.log('Delete');
+                        elem.closest('tr').remove();
+
+                    },
+                    error: function (e) {
+                        console.log(e.responseText);
+                    }
+                });
+            }
+        }
+
+
+    </script>
+{% endblock %}

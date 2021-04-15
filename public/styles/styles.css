@@ -1,370 +1,452 @@
 /* Styles des divisions principales de la page */
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Kaushan+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Concert+One&family=Press+Start+2P&family=Share+Tech+Mono&display=swap');body {
+  background: #0aaffd;
+  padding: 0;
+  font-family: "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
+  font-size: 0.8em;
+}
+html {
+  height: 100%;
+}
+
+.flash-message{
+  width: 80%;
+  background-color: white;
+  border-radius: 20px;
+  text-align: center;
+}
+
+
 body {
-    background: rgb(82, 233, 254);
-    background: linear-gradient(0deg, rgba(82, 233, 254, 1) 1%, rgba(0, 52, 226, 1) 100%);
-    margin: 0% 0%;
-    padding: 0;
-    font-family: "Trebuchet MS", Verdana, Geneva, Arial, Helvetica, sans-serif;
-    font-size: 0.8em;
-    height: 100vh;
-  }
-  
-  #page {
-    width: 100%;
-    margin: 0%;
-    padding: 0.1em;
-    display: flex;
-  }
-  
-  #entete {
-    background-color: rgb(72, 198, 236);
-    color: #980101;
-    border: solid 0.1em #980101;
-    height: 154px;
-    padding: 0em;
-    border-collapse: separate;
-  }
-  
-  #pied {
-    clear: both;
-    border: solid 0.2em #980101;
-    margin-left: 18%;
-    margin-top: 1em;
-    padding: 0.4em;
-    padding: 0.2em;
-    border-collapse: separate;
-  }
-  
-  #menuGauche {
-    margin-top: 0.8em;
-    padding: 1em;
-    background-color: white;
-    color: rgb(0, 85, 227);
-    float: left;
-    width: 14%;
-  }
-  
-  #contenu {
-    border: none;
-    padding: 1.3em;
-    background: linear-gradient(140.8deg, rgba(2, 149, 251, 1) 0%, rgba(101, 206, 249, 1) 55.83%, rgba(103, 207, 249, 1) 100%);
-  
-  
-    margin-top: 1.2em;
-    /* permet de fixer une hauteur mini sur les navigateurs modernes */
-    min-height: 27em;
-    /* pour obtenir le m�me effet sur IE, sachant que si le contenu d�passe, il
-  "poussera" la hauteur en ne respectant pas la norme. On se joue de ses lacunes
-  */
-    margin-left: 18%;
-    height: 100%;
-  }
-  
-  /* pour r�tablir le mauvais effet sur les nav. modernes */
-  html>body #contenu {
-    height: auto;
-  }
-  
-  /* style � appliquer � la balise ul d'identifiant menulist */
-  ul#menuList {
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-    width: 98%;
-    font-size: 1em;
-  }
-  
-  /* style � appliquer aux �l�ments de la balise ul d'identifiant menulist */
-  ul#menuList li {
-    position: relative;
-    margin: 0px;
-    padding: 0px;
-  }
-  
-  /* apparences des liens dans listes et sous-listes non num�rot�es */
-  ul#menuList a {
-    color: rgb(0, 85, 227);
-    display: block;
-    text-decoration: none;
-    width: 100%;
-  }
-  
-  ul#menuList a:hover {
-    background: rgb(0, 85, 227);
-    color: white;
-  }
-  
-  #entete #logoGSB {
-    float: left;
-    width: 238px;
-    height: 152px;
-  }
-  
-  #entete h1 {
-    margin: 1em;
-    margin-left: 6em;
-    font-size: x-large;
-    text-align: center;
-  }
-  
-  #contenu pre {
-    width: 95%;
-    overflow: scroll;
-  }
-  
-  #contenu h2 {}
-  
-  .logoValidW3c {
-    display: inline;
-  }
-  
-  #libValidW3c {
-    display: inline;
-    vertical-align: middle;
-  }
-  
-  /* Style des formulaires */
-  .corpsForm {
-    border: solid 0.1em #000;
-    border-bottom-width: 1px;
-    margin-bottom: 0em;
-    width: 95%;
-  }
-  
-  .piedForm {
-    border-bottom-width: 0.1em;
-    border-left-width: 0.1em;
-    border-right-width: 0.1em;
-    border-top-width: 0em;
-    border-style: solid;
-    border-color: #000;
-    text-align: right;
-    width: 95%;
-    margin-top: 0em;
-  }
-  
-  form {
-    margin-bottom: 1em;
-  }
-  
-  .corpsForm legend {
-    font-weight: bold;
-    font-size: 1.2em;
-  }
-  
-  .corpsForm label {
-    float: left;
-    text-align: right;
-    width: 33%;
-    margin: 0;
-    padding: 0 .5em 0 0;
-    line-height: 1.8;
-  }
-  
-  input,
-  
-  textarea,
-  select {
-    font-family: "Trebuchet MS", sans-serif;
-    font-size: 1em;
-  }
-  
-  /* 
-  button {
-    width: 60px;
-    height: 30px;
-    text-align: center;
-    vertical-align: middle;
-  } */
-  
-  input:hover,
-  textarea:hover,
-  select:hover {
-    background-color: #FAFAE6;
-    cursor: pointer;
-  }
-  
-  /*  Le texte des messages d'erreur est de couleur rose sur fond ocre et de 
-  taille de caract�res l�g�rement sup�rieure � la normale */
-  .erreur {
-    background-color: rgb(237, 210, 229);
-    color: rgb(203, 28, 128);
-    font-size: 1.1em;
-    width: 95%;
-  }
-  
-  .centre {
-    text-align: center;
-  }
-  
-  .info {
-    background-color: rgb(178, 207, 81);
-    color: white;
-    font-size: 1.1em;
-    width: 95%
-  }
-  
-  .encadre {
-    border: solid 0.1em #000;
-    width: 95%;
-  }
-  
-  /* Style pour les liens de la page principale */
-  #contenu .corpsTexte {
-    width: 80%;
-    font-size: 1.2em;
-  }
-  
-  /* Style pour les liens de la page principale */
-  #contenu a {
-    font-size: 1.1em;
-    color: gray;
-    text-decoration: none;
-  }
-  
-  #contenu a:hover {
-    text-decoration: underline;
-    background-color: #D9BB7A;
-    font-size: 1em;
-  }
-  
-  
-  
-  #contenu img {
-    height: 15em;
-    float: left;
-  
-  }
-  
-  #connexion {
-    border-left: groove 0.8em #980101;
-  }
-  
-  
-  #login {
-    background: #0b1d5c;
-    padding-bottom: 15% !important;
-    border-radius: 3em !important;
-  
-  }
-  
-  .round {
-    border-radius: 2em;
-  }
-  
-  .marron {
-    background-color: #4E3030;
-  }
-  
-  .ocean {
-    background-color: #A5BFEF;
-  }
-  
-  .text-ocean {
-  
-  
-    color: #00B8D0;
-  }
-  
-  .grey-text {
-    color: #8B8B8B
-  }
-  
-  #cardForfait td {
-    font-family: 'Permanent Marker',
-      cursive;
-  }
-  
-  #qtForfait {
-    color: #8B8B8B
-  }
-  
-  td i {
-    font-size: 130%;
-  }
-  
-  .hidden {
-    visibility: hidden;
-  }
-  
-  #menu
-  {
-    background-color: rgb(255, 199, 199, 0.3)  !important;
-    height: 10%;
-    border-radius: 70px 70px 70px 70px;
-    
-  
-    
-  }
-  #menu a{
-    color:white !important;
-    font-size: 2em;
-  
-  
-  }
-  
-  
-  
-  table td
-  {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#page {
+  width: 100%;
+  margin: 0%;
+  padding: 0.1em;
+  display: flex;
+
+}
+
+#entete {
+  background-color: rgb(72, 198, 236);
+  color: #980101;
+  border: solid 0.1em #980101;
+  height: 154px;
+  padding: 0em;
+  border-collapse: separate;
+}
+
+#pied {
+  clear: both;
+  border: solid 0.2em #980101;
+  margin-left: 18%;
+  margin-top: 1em;
+  padding: 0.4em;
+  padding: 0.2em;
+  border-collapse: separate;
+}
+
+#menuGauche {
+  margin-top: 0.8em;
+  padding: 1em;
+  background-color: white;
+  color: rgb(0, 85, 227);
+  float: left;
+  width: 14%;
+}
+
+#contenu {
+  border: none;
+  padding: 1.3em;
+  /*background: linear-gradient(140.8deg, rgba(2, 149, 251, 1) 0%, rgba(101, 206, 249, 1) 55.83%, rgba(103, 207, 249, 1) 100%);*/
+  background-color: #0b1d5c;
+  margin-bottom: 200px;
+
+  margin-top: 1.2em;
+  /* permet de fixer une hauteur mini sur les navigateurs modernes */
+  min-height: 27em;
+  /* pour obtenir le m�me effet sur IE, sachant que si le contenu d�passe, il
+"poussera" la hauteur en ne respectant pas la norme. On se joue de ses lacunes
+*/
+  margin-left: 18%;
+  height: 100%;
+}
+
+/* pour r�tablir le mauvais effet sur les nav. modernes */
+html>body #contenu {
+  height: auto;
+}
+
+/* style � appliquer � la balise ul d'identifiant menulist */
+ul#menuList {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  width: 98%;
+  font-size: 1em;
+}
+
+/* style � appliquer aux �l�ments de la balise ul d'identifiant menulist */
+ul#menuList li {
+  position: relative;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* apparences des liens dans listes et sous-listes non num�rot�es */
+ul#menuList a {
+  color: rgb(0, 85, 227);
+  display: block;
+  text-decoration: none;
+  width: 100%;
+}
+
+ul#menuList a:hover {
+  background: rgb(0, 85, 227);
+  color: white;
+}
+
+#entete #logoGSB {
+  float: left;
+  width: 238px;
+  height: 152px;
+}
+
+
+.w-35
+{
+  width: 35%;
+}
+
+.border-b-25 {
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+
+}
+
+#show-visiteur-fiche .content {
+  font-family: 'Concert One', monospace;
+}
+
+#show-visiteur-fiche h3 {
+  font-family: 'Share Tech Mono', monospace;
+  color: white;
+
+}
+
+.text-maker {
+  font-family: 'Permanent Marker',
+  cursive;
+}
+.border-25
+ {
+border-radius:25px;
+ }
+
+.bg-green-dark
+{
+  background-color: #0B535B;
+}
+
+#entete h1 {
+  margin: 1em;
+  margin-left: 6em;
+  font-size: x-large;
+  text-align: center;
+}
+
+#contenu pre {
+  width: 95%;
+  overflow: scroll;
+}
+
+
+.logoValidW3c {
+  display: inline;
+}
+
+#libValidW3c {
+  display: inline;
+  vertical-align: middle;
+}
+
+/* Style des formulaires */
+.corpsForm {
+  border: solid 0.1em #000;
+  border-bottom-width: 1px;
+  margin-bottom: 0em;
+  width: 95%;
+}
+
+.piedForm {
+  border-bottom-width: 0.1em;
+  border-left-width: 0.1em;
+  border-right-width: 0.1em;
+  border-top-width: 0em;
+  border-style: solid;
+  border-color: #000;
+  text-align: right;
+  width: 95%;
+  margin-top: 0em;
+}
+
+form {
+  margin-bottom: 1em;
+}
+
+.corpsForm legend {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.corpsForm label {
+  float: left;
+  text-align: right;
+  width: 33%;
+  margin: 0;
+  padding: 0 .5em 0 0;
+  line-height: 1.8;
+}
+
+input,
+
+textarea,
+select {
+  font-family: "Trebuchet MS", sans-serif;
+  font-size: 1em;
+}
+
+/*
+button {
+  width: 60px;
+  height: 30px;
+  text-align: center;
+  vertical-align: middle;
+} */
+
+input:hover,
+textarea:hover,
+select:hover {
+  background-color: #FAFAE6;
+  cursor: pointer;
+}
+
+/*  Le texte des messages d'erreur est de couleur rose sur fond ocre et de
+taille de caract�res l�g�rement sup�rieure � la normale */
+.erreur {
+  background-color: rgb(237, 210, 229);
+  color: rgb(203, 28, 128);
+  font-size: 1.1em;
+  width: 95%;
+}
+
+.centre {
+  text-align: center;
+}
+
+.info {
+  background-color: rgb(178, 207, 81);
+  color: white;
+  font-size: 1.1em;
+  width: 95%
+}
+
+.encadre {
+  border: solid 0.1em #000;
+  width: 95%;
+}
+
+/* Style pour les liens de la page principale */
+#contenu .corpsTexte {
+  width: 80%;
+  font-size: 1.2em;
+}
+
+/* Style pour les liens de la page principale */
+#contenu a {
+  font-size: 1.1em;
+  color: gray;
+  text-decoration: none;
+}
+
+#contenu a:hover {
+  text-decoration: underline;
+  background-color: #D9BB7A;
+  font-size: 1em;
+}
+
+
+
+#contenu img {
+  height: 15em;
+  float: left;
+
+}
+
+#connexion {
+  border-left: groove 0.8em #980101;
+}
+
+
+#login {
+  background: #0b1d5c;
+  padding-bottom: 15% !important;
+  border-radius: 3em !important;
+
+}
+
+.round {
+  border-radius: 2em;
+}
+
+.marron {
+  background-color: #4E3030;
+}
+
+.ocean {
+  background-color: #A5BFEF;
+}
+
+.text-ocean {
+
+
+  color: #00B8D0;
+}
+
+.grey-text {
+  color: #8B8B8B
+}
+
+#cardForfait td {
+  font-family: 'Permanent Marker',
+  cursive;
+}
+
+
+.font-marker {
+  font-family: 'Kalam', cursive;
+
+}
+#qtForfait {
+  color: #8B8B8B
+}
+
+td i {
+  font-size: 130%;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+#menu
+{
+  background-color: rgb(255, 199, 199, 0.3)  !important;
+  height: 10%;
+  border-radius: 70px 70px 70px 70px;
+
+
+
+}
+#menu a{
+  color:white !important;
+  font-size: 2em;
+
+
+}
+
+#fiche-tab .cel-bordered
+{
+  border: 2px solid black;
+  color:white ;
+  background-color: #0B535B;
+}
+
+
+table
+{
+  width: 100%;
+}
+table td
+{
   color: #000 !important;
+}
+#menu .navbar-nav  a:hover {
+
+  color: #1B406A !important;
+
+
+}
+
+#menu img
+{
+  width: 3em;
+  border-radius: 50%;
+  border: 2px solid black;
+  padding: 5px;
+
+}
+
+#menu .left
+{
+  position: absolute;
+  bottom:15px;
+}
+
+#menu i {
+  color: #1B406A !important;
+}
+
+#menu{margin:2%}
+
+.rotate-diagonal-1 {
+  -webkit-animation: rotate-diagonal-1 0.6s linear both;
+  animation: rotate-diagonal-1 0.6s linear both;
+}
+
+/* ----------------------------------------------
+ * Generated by Animista on 2020-12-16 19:58:31
+ * Licensed under FreeBSD License.
+ * See http://animista.net/license for more info.
+ * w: http://animista.net, t: @cssanimista
+ * ---------------------------------------------- */
+
+/**
+ * ----------------------------------------
+ * animation rotate-diagonal-1
+ * ----------------------------------------
+ */
+@-webkit-keyframes rotate-diagonal-1 {
+  0% {
+    -webkit-transform: rotate3d(1, 1, 0, 0deg);
+    transform: rotate3d(1, 1, 0, 0deg);
   }
-  #menu .navbar-nav  a:hover {
-    
-    color: #1B406A !important;
-    
-  
-    }
-  
-  #menu i {
-      color: #1B406A !important;
+  50% {
+    -webkit-transform: rotate3d(1, 1, 0, -180deg);
+    transform: rotate3d(1, 1, 0, -180deg);
   }
-  
-  #menu{margin:2%}
-  
-  .rotate-diagonal-1 {
-      -webkit-animation: rotate-diagonal-1 0.6s linear both;
-              animation: rotate-diagonal-1 0.6s linear both;
+  100% {
+    -webkit-transform: rotate3d(1, 1, 0, -360deg);
+    transform: rotate3d(1, 1, 0, -360deg);
   }
-  
-  /* ----------------------------------------------
-   * Generated by Animista on 2020-12-16 19:58:31
-   * Licensed under FreeBSD License.
-   * See http://animista.net/license for more info. 
-   * w: http://animista.net, t: @cssanimista
-   * ---------------------------------------------- */
-  
-  /**
-   * ----------------------------------------
-   * animation rotate-diagonal-1
-   * ----------------------------------------
-   */
-   @-webkit-keyframes rotate-diagonal-1 {
-    0% {
-      -webkit-transform: rotate3d(1, 1, 0, 0deg);
-              transform: rotate3d(1, 1, 0, 0deg);
-    }
-    50% {
-      -webkit-transform: rotate3d(1, 1, 0, -180deg);
-              transform: rotate3d(1, 1, 0, -180deg);
-    }
-    100% {
-      -webkit-transform: rotate3d(1, 1, 0, -360deg);
-              transform: rotate3d(1, 1, 0, -360deg);
-    }
+}
+@keyframes rotate-diagonal-1 {
+  0% {
+    -webkit-transform: rotate3d(1, 1, 0, 0deg);
+    transform: rotate3d(1, 1, 0, 0deg);
   }
-  @keyframes rotate-diagonal-1 {
-    0% {
-      -webkit-transform: rotate3d(1, 1, 0, 0deg);
-              transform: rotate3d(1, 1, 0, 0deg);
-    }
-    50% {
-      -webkit-transform: rotate3d(1, 1, 0, -180deg);
-              transform: rotate3d(1, 1, 0, -180deg);
-    }
-    100% {
-      -webkit-transform: rotate3d(1, 1, 0, -360deg);
-              transform: rotate3d(1, 1, 0, -360deg);
-    }
+  50% {
+    -webkit-transform: rotate3d(1, 1, 0, -180deg);
+    transform: rotate3d(1, 1, 0, -180deg);
   }
+  100% {
+    -webkit-transform: rotate3d(1, 1, 0, -360deg);
+    transform: rotate3d(1, 1, 0, -360deg);
+  }
+}
   

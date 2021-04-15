@@ -2,15 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Fraisforfait
  *
  * @ORM\Table(name="FraisForfait")
- * @ORM\Entity(repositoryClass="App\Repository\FraisForfaitRepository")
+ * @ORM\Entity
  */
 class Fraisforfait
 {
@@ -36,27 +34,6 @@ class Fraisforfait
      * @ORM\Column(name="montant", type="decimal", precision=5, scale=2, nullable=true)
      */
     private $montant;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Fichefrais", mappedBy="idfraisforfait")
-     */
-    private $idvisiteur;
-
-    /**
-     * @ORM\OneToMany(targetEntity=LigneFraisForfait::class, mappedBy="fraisForfait")
-     */
-    private $ligneFraisForfait;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->idvisiteur = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ligneFraisForfait = new ArrayCollection();
-    }
 
     public function getId(): ?string
     {
@@ -87,60 +64,5 @@ class Fraisforfait
         return $this;
     }
 
-    /**
-     * @return Collection|Fichefrais[]
-     */
-    public function getIdvisiteur(): Collection
-    {
-        return $this->idvisiteur;
-    }
 
-    public function addIdvisiteur(Fichefrais $idvisiteur): self
-    {
-        if (!$this->idvisiteur->contains($idvisiteur)) {
-            $this->idvisiteur[] = $idvisiteur;
-            $idvisiteur->addIdfraisforfait($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdvisiteur(Fichefrais $idvisiteur): self
-    {
-        if ($this->idvisiteur->removeElement($idvisiteur)) {
-            $idvisiteur->removeIdfraisforfait($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|LigneFraisForfait[]
-     */
-    public function getLigneFraisForfait(): Collection
-    {
-        return $this->ligneFraisForfait;
-    }
-
-    public function addLigneFraisForfait(LigneFraisForfait $ligneFraisForfait): self
-    {
-        if (!$this->ligneFraisForfait->contains($ligneFraisForfait)) {
-            $this->ligneFraisForfait[] = $ligneFraisForfait;
-            $ligneFraisForfait->setFraisForfait($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLigneFraisForfait(LigneFraisForfait $ligneFraisForfait): self
-    {
-        if ($this->ligneFraisForfait->removeElement($ligneFraisForfait)) {
-            // set the owning side to null (unless already changed)
-            if ($ligneFraisForfait->getFraisForfait() === $this) {
-                $ligneFraisForfait->setFraisForfait(null);
-            }
-        }
-
-        return $this;
-    }
 }

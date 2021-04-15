@@ -11,6 +11,8 @@
         {# Run `composer require symfony/webpack-encore-bundle`
            and uncomment the following Encore helpers to start using Symfony UX #}
              <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@700&display=swap" rel="stylesheet">
 
   <link href="{{asset('styles/styles.css')}}" rel="stylesheet" type="text/css" />
 
@@ -18,9 +20,11 @@
         {% block stylesheets %}
         
         {% endblock %}
+        <script src="{{ asset('js/app.js') }}"></script>
  <script src="https://kit.fontawesome.com/9aef1c61fc.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
-  <script type="text/javascript" charset="utf8" src="{{ asset('js/footable.min.js')}}"></script>  
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         {% block javascripts %}
             {#{{ encore_entry_script_tags('app') }}#}
         {% endblock %}
@@ -28,6 +32,16 @@
     <body>
        {% if app.user %}
        {% include('partials/sommaire.html.twig') %}
+           {% for message in app.flashes('sucess') %}
+               <div class="alert alert-success flash-message mx-auto">
+                   <h4>{{ message }} </h4>
+               </div>
+           {% endfor %}
+           {% for message in app.flashes('error') %}
+               <div class="alert alert-danger flash-message mx-auto">
+                   <h4>{{ message }} </h4>
+               </div>
+           {% endfor %}
        {% endif %}
         <div id="page" class="container-fluid align-items-center ">
         {% block body %}

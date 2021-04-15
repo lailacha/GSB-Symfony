@@ -1,70 +1,94 @@
 {% extends 'partials/container.html.twig' %}
 
-{% block title %}Fiche de  {{ fichefrai.idvisiteur.nom }}  {{ fichefrai.idvisiteur.prenom }} <br> du {{ fichefrai.getFormatedMonth() }}
+{% block title %}Fiche de  {{ fichefrai.idvisiteur.nom }}  {{ fichefrai.idvisiteur.prenom }}
+    <br> du {{ fichefrai.getFormatedMonth() }}
 {% endblock %}
 
 {% block content %}
-<div class="my-auto col-8 offset-2 bg-white p-4   round ">
-    <table  id="fiche-tab" class="table table-light">
-        <tbody>
-        <tr class="cel-bordered">
-            <th>Fiche de frais</th>
-            <td></td>
-        </tr>
-        <tr>
-            <th>Visiteur</th>
-            <td>{{ fichefrai.idvisiteur.nom }}  {{ fichefrai.idvisiteur.prenom }}</td>
-        </tr>
+    <div class="my-auto col-8 offset-2 bg-white p-4   round ">
+        <table id="fiche-tab" class="table table-light">
+            <tbody>
+            <tr class="cel-bordered">
+                <th>Fiche de frais</th>
+                <td></td>
+            </tr>
+            {% if fichefrai is defined %}
 
-            <tr>
-                <th>Mois</th>
-                <td>{{ fichefrai.getFormatedMonth() }}</td>
-            </tr>
-            <tr>
-                <th>Nbjustificatifs</th>
-                <td>{{ fichefrai.nbjustificatifs }}</td>
-            </tr>
-            <tr>
-                <th>Montantvalide</th>
-                <td>{{ fichefrai.montantvalide }}</td>
-            </tr>
-        <tr>
-            <th>Etat</th>
-            <td>{{ fichefrai.idetat.libelle }}</td>
-        </tr>
-            <tr>
-                <th>Datemodif</th>
-                <td>{{ fichefrai.datemodif ? fichefrai.datemodif|date('Y-m-d') : '' }}</td>
-            </tr>
-        <tr class="cel-bordered">
-            <th>Les frais hors forfait</th>
-            <td></td>
-        </tr>
-        {% for fraisHF in lesfraisHF %}
-        <tr>
-                <th>{{fraisHF.libelle}}</th>
-                <td>{{fraisHF.montant}} €</td>
-        </tr>
-        {% endfor %}
-        <tr class="cel-bordered">
-            <th>Les frais forfait</th>
-            <td></td>
-        </tr>
-        {% for fraisF in lesfraisF %}
-        <tr>
-                <th>{{fraisF.fraisforfait.libelle}}</th>
-                <td>{{fraisF.quantite}} </td>
-        </tr>
-        {% endfor %}
+                <tr>
+                    <th>Visiteur</th>
+                    <td>{{ fichefrai.idvisiteur.nom }}  {{ fichefrai.idvisiteur.prenom }}</td>
+                </tr>
 
-        </tbody>
-    </table>
+                <tr>
+                    <th>Mois</th>
+                    <td>{{ fichefrai.getFormatedMonth() }}</td>
+                </tr>
+                <tr>
+                    <th>Nbjustificatifs</th>
+                    <td>{{ fichefrai.nbjustificatifs }}</td>
+                </tr>
+                <tr>
+                    <th>Montantvalide</th>
+                    <td>{{ fichefrai.montantvalide }}</td>
+                </tr>
+                <tr>
+                    <th>Etat</th>
+                    <td>{{ fichefrai.idetat.libelle }}</td>
+                </tr>
+                <tr>
+                    <th>Datemodif</th>
+                    <td>{{ fichefrai.datemodif ? fichefrai.datemodif|date('Y-m-d') : '' }}</td>
+                </tr>
+
+            {% else %}
+                <tr>
+                    <td>Fiche vide</td>
+                </tr>
+            {% endif %}
+            <tr class="cel-bordered bg-green-dark">
+                <th>Les frais hors forfait</th>
+                <td></td>
+            </tr>
+            {% if lesfraisHF is not empty %}
 
 
-</div>
+                {% for fraisHF in lesfraisHF %}
+                    <tr>
+                        <th>{{ fraisHF.libelle }}</th>
+                        <td>{{ fraisHF.montant }} €</td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td>Aucun frais </td>
+                </tr>
+            {% endif %}
+            <tr class="cel-bordered">
+                <th>Les frais forfait</th>
+                <td></td>
+            </tr>
+            {% if lesfraisF is not empty %}
+                {% for fraisF in lesfraisF %}
+                    <tr>
+                        <th>{{ fraisF.fraisforfait.libelle }}</th>
+                        <td>{{ fraisF.quantite }} </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>Aucun frais </td>
+                </tr>
+            {% endif %}
+
+
+            </tbody>
+        </table>
+
+
+    </div>
     </div>
     <div class="row mt-2 mr-2 flex-row justify-content-sm-end">
-            <a  class="pull-right" href="{{ path('fichefrais_list') }}">Retour à la liste des fiches de frais</a>
+        <a class="pull-right" href="{{ path('fichefrais_list') }}">Retour à la liste des fiches de frais</a>
 
     </div>
 

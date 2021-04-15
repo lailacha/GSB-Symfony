@@ -55,7 +55,7 @@ class FicheFraisRepository extends ServiceEntityRepository
             ->andWhere('f.idvisiteur = :idvisiteur')
             ->setParameter('idvisiteur', $id)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getSingleScalarResult();
     }
 
     // /**
@@ -86,4 +86,22 @@ class FicheFraisRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getAll($search)
+    {
+        $query = $this->createQueryBuilder('f');
+
+        if ($search->getIdvisiteur()) {
+            $query =  $query->andWhere('f.idvisiteur = :visiteur')->setParameter('visiteur', $search->getIdvisiteur());
+        }
+
+        if ($search->getIdEtat()) {
+            $query =  $query->andWhere('f.idetat = :etat')->setParameter('etat', $search->getIdEtat());
+        }
+        if ($search->getMois()) {
+            $query =  $query->andWhere("f.mois = :mois")->setParameter('mois', $search->getMois());
+        }
+        $query =  $query->orderBy("f.mois", "DESC");
+
+        return $query->getQuery();
+    }
 }

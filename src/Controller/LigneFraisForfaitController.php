@@ -4,17 +4,32 @@ namespace App\Controller;
 
 use App\Entity\LigneFraisForfait;
 use App\Form\LigneFraisForfaitType;
-use App\Repository\LigneFraisForfaitRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\FraisForfaitRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Repository\LigneFraisForfaitRepository;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * @Route("/ligne/frais/forfait")
+ * @Route("admin/ligne/frais/forfait")
  */
 class LigneFraisForfaitController extends AbstractController
 {
+
+
+    private $ligneFraisForfaitRepository;
+    private $fraisForfaitRepository;
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository)
+    {
+        $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
+        $this->entityManager = $entityManager;
+        $this->fraisForfaitRepository = $fraisForfaitRepository;
+    }
+
     /**
      * @Route("/", name="ligne_frais_forfait_index", methods={"GET"})
      */
@@ -91,4 +106,37 @@ class LigneFraisForfaitController extends AbstractController
         } else
             return $this->json(["rep" => "non"], 400, [], []);
     }
+
+
+    /**
+     * @Route("/majFrais", name="ligne_frais_forfait_maj", methods={"POST"})
+     */
+    public function majFraisForfait(Request $request, LigneFraisForfaitRepository $ligneFraisForfaitRepository)
+    {
+        if ($this->isCsrfTokenValid('maj', $request->request->get('_token'))) {
+
+            $KeyFrais = $request->request->get('lesFraisForfait');
+            foreach ($KeyFrais as $key => $quantite) {
+
+                $fraisForfait = $ligneFraisForfaitRepository->findOneBy([
+                    'visiteur' => $request->request->get('idVisiteur'),
+                    'mois' => $request->request->get('mois'),
+                    'fraisForfait' => $key
+                ]);
+                $fraisForfait->setQuantite($quantite);
+                $this->entityManager->flush();
+
+            }
+
+            return $this->json(["rep" => "Frais modifié!"], 200, [], []);
+        }
+        return $this->json(["rep" => "Erreur de Token"], 400, [], []);
+
+
+    }
+
 }
+
+
+
+

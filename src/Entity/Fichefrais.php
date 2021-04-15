@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -16,11 +14,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Fichefrais
 {
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="mois", type="string", length=6, nullable=false, options={"fixed"=true})
      * @Groups({"fiche:mois"})
      */
     private $mois;
@@ -47,6 +51,17 @@ class Fichefrais
     private $datemodif;
 
     /**
+     * @var \User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
+     * })
+     * @Groups({"fiche:mois"})
+     */
+    private $idvisiteur;
+
+    /**
      * @var \Etat
      *
      * @ORM\ManyToOne(targetEntity="Etat")
@@ -56,38 +71,21 @@ class Fichefrais
      */
     private $idetat;
 
-    /**
-     * @var \Visiteur
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="Visiteur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idVisiteur", referencedColumnName="id")
-     * })
-     * @Groups({"fiche:mois"})
-
-     */
-    private $idvisiteur;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Fraisforfait", mappedBy="idvisiteur")
-     */
-    private $idfraisforfait;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
+    public function getId(): ?int
     {
-        $this->idfraisforfait = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->id;
     }
 
     public function getMois(): ?string
     {
         return $this->mois;
+    }
+
+    public function setMois(string $mois): self
+    {
+        $this->mois = $mois;
+
+        return $this;
     }
 
     public function getNbjustificatifs(): ?int
@@ -125,8 +123,23 @@ class Fichefrais
 
         return $this;
     }
+    public function __toString(): string
+    {
+        return $this->mois;
+    }
 
-    public function getIdetat()
+    public function getIdvisiteur()
+    {
+        return $this->idvisiteur;
+    }
+    public function setIdvisiteur(?User $idvisiteur): self
+    {
+        $this->idvisiteur = $idvisiteur;
+
+        return $this;
+    }
+
+    public function getIdetat(): ?Etat
     {
         return $this->idetat;
     }
@@ -138,42 +151,14 @@ class Fichefrais
         return $this;
     }
 
-    public function getIdvisiteur()
+
+    public function getFormatedMonth()
     {
-        return $this->idvisiteur;
+        $mois = $this->mois;
+        $numAnnee = substr($mois, 0, 4);
+        $numMois = substr($mois, 4, 2);
+        return $numAnnee . '/' . $numMois;
     }
 
-    public function setIdvisiteur(?Visiteur $idvisiteur): self
-    {
-        $this->idvisiteur = $idvisiteur;
 
-        return $this;
-    }
-
-    /**
-     * @return Collection|Fraisforfait[]
-     */
-    public function getIdfraisforfait(): Collection
-    {
-        return $this->idfraisforfait;
-    }
-
-    public function addIdfraisforfait(Fraisforfait $idfraisforfait): self
-    {
-        if (!$this->idfraisforfait->contains($idfraisforfait)) {
-            $this->idfraisforfait[] = $idfraisforfait;
-            $idfraisforfait->addIdvisiteur($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdfraisforfait(Fraisforfait $idfraisforfait): self
-    {
-        if ($this->idfraisforfait->removeElement($idfraisforfait)) {
-            $idfraisforfait->removeIdvisiteur($this);
-        }
-
-        return $this;
-    }
 }
