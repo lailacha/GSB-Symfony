@@ -1,9 +1,14 @@
 security:
     encoders:
-        App\Entity\User:
-            algorithm: auto
+        # an encoder used in the past for some users
+        legacy:
+            algorithm: plaintext
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+        App\Entity\User:
+            # the new encoder, along with its options
+            algorithm: bcrypt
+            migrate_from:
+                - legacy # uses the "legacy" encoder configured above
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:

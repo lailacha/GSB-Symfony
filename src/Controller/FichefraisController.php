@@ -3,12 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Fichefrais;
-use App\Entity\FicheSearch;
-use App\Entity\LigneFraisForfait;
 use App\Entity\Lignefraishorsforfait;
 use App\Form\FichefraisType;
 use App\Form\FichesearchType;
-use App\Form\FicheType;
 use App\Repository\FicheFraisRepository;
 use App\Repository\FraisForfaitRepository;
 use App\Repository\LigneFraisForfaitRepository;
@@ -41,6 +38,8 @@ class FichefraisController extends AbstractController
     }
 
     /**
+     * Renvoie la liste des fiche de frais avec ou sans critères de recherches tout en gérant la pagination
+     *
      * @Route("/", name="fichefrais_list", methods={"GET"})
      * @param PaginatorInterface $paginator
      * @param Request $request
@@ -56,7 +55,6 @@ class FichefraisController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $query = $ficheFraisRepository->getAll($search);
-
         }
 
         $fiches = $paginator->paginate( $ficheFraisRepository->getAll($search), $request->query->getInt('page', 1), 10);
@@ -68,6 +66,8 @@ class FichefraisController extends AbstractController
     }
 
     /**
+     * Renvoie la fiche de frais du mois actuelle de l'utilisateur connecté et permet sa modification
+     *
      * @Route("/new", name="fichefrais_new", methods={"GET","POST"})
      * @param Request $request
      * @param FraisService $fraisService
@@ -79,17 +79,14 @@ class FichefraisController extends AbstractController
     public function new(Request $request, FraisService $fraisService, FraisForfaitRepository $fraisForfaitRepository, LigneFraisForfaitRepository $ligneFraisForfaitRepository,LigneFraisHFRepository $lignefraishorsforfaitRepository, FicheFraisRepository $ficheFraisRepository): Response
     {
 
-       // $user = $this->getUser()->getId();
         $user = $this->entityManager->getReference('App\Entity\User', $this->getUser()->getId());
+
         //On vérifie si une fiche existe déjà sinon on en crée une
         $mois = $fraisService->getMois(date('d/m/Y'));
         $ficheExist = $fraisService->checkIfFicheExist($user, $mois);
-        //dd($user, $mois, $ficheExist);
-
         if($ficheExist)
         {
-//
-//            //Si elle existe déjà
+//           Si elle existe déjà
 
             $forfaitEtape = $ligneFraisForfaitRepository->findOneBy([
                 'visiteur' => $user,
@@ -116,11 +113,6 @@ class FichefraisController extends AbstractController
                 'fraisForfait' => 'REP'
             ]);
 
-
-
-            //dd($forfaitEtape, $forfaitNuit, $forfaitKilometre, $forfaitRepas);
-
-//
             $form = $this->createFormBuilder()
                 ->add('ETP', TextType::class, ['label' =>'Forfait étape','attr' => ['class' => 'form-control',  'placeholder'=> $forfaitEtape->getQuantite()]])
                 ->add('NUI', TextType::class , ['label' =>'Forfait nuitée','attr' => ['class' => 'form-control',  'placeholder'=> $forfaitNuit->getQuantite()]])
@@ -129,8 +121,6 @@ class FichefraisController extends AbstractController
                 ->add('Envoyer', SubmitType::class , ['attr' => ['class' => 'form-control bg-green-dark text-white mt-3'],
                     'label' =>'Envoyer'])
                 ->getForm();
-
-
         }
         else
         {
@@ -154,7 +144,6 @@ class FichefraisController extends AbstractController
                 ->add('Envoyer', SubmitType::class , ['attr' => ['class' => 'form-control bg-green-dark text-white mt-3'],
                     'label' =>'Envoyer'])
                 ->getForm();
-
         }
 
        //Sinon
@@ -162,15 +151,11 @@ class FichefraisController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // data is an array with "name", "email", and "message" keys
             $data = $form->getData();
-
 
             //ajout des frais forfait en bdd
             foreach ($data as $key => $value)
             {
-
-                //si le frais n'existe pas déjà, on le créé
 
                //Recuperer les frais correspondant
                 $fraisForfait = $ligneFraisForfaitRepository->findOneBy([
@@ -179,17 +164,15 @@ class FichefraisController extends AbstractController
                     'fraisForfait' => $key
                 ]);
 
-                //sinon on le modifiie
+                //on le modifiie
                 $fraisForfait->setQuantite($value);
                 $this->entityManager->persist($fraisForfait);
                 $this->entityManager->flush();
 
-
-
             }
         }
 
-
+        //formulaire pour ajouter un nouveau frais hors forfait
         $formFraisHF = $this->createFormBuilder()
             ->add('libelle', TextType::class, ['attr' => ['class' => 'form-control']])
             ->add('montant', TextType::class, ['attr' => ['class' => 'form-control']])
@@ -197,10 +180,10 @@ class FichefraisController extends AbstractController
             ->add('Envoyer', SubmitType::class, ['attr' => ['class' => 'mt-3 btn bg-green-dark text-white']])
             ->getForm();
 
+        //Si la requete contient un ajout de frais hors forfait
         $formFraisHF->handleRequest($request);
         if ($formFraisHF->isSubmitted() && $formFraisHF->isValid()) {
 
-            // data is an array with "name", "email", and "message" keys
             $data = $formFraisHF->getData();
 
             $newFrais = new LigneFraisHorsForfait();
@@ -213,19 +196,14 @@ class FichefraisController extends AbstractController
             $this->entityManager->persist($newFrais);
             $this->entityManager->flush();
 
-
         }
 
-
-        $fichefrai = new Fichefrais();
         $lesFraisHF = $lignefraishorsforfaitRepository->findBy([
             'idvisiteur'=> $user,
             'mois'=> $mois
         ]);
 
-
         return $this->render('fichefrais/new.html.twig', [
-            'fichefrai' => $fichefrai,
             'form' => $form->createView(),
             'formFraisHF' => $formFraisHF->createView(),
             'fraisHF' =>$lesFraisHF
@@ -233,6 +211,8 @@ class FichefraisController extends AbstractController
     }
 
     /**
+     * Renvoie le détail d'une fiche de frais
+     *
      * @Route("admin/{id}", name="fichefrais_show", methods={"GET"})
      * @param Fichefrais $fichefrai
      * @param LignefraishorsforfaitRepository $LignefraishorsforfaitRepository
@@ -254,42 +234,15 @@ class FichefraisController extends AbstractController
     }
 
     /**
-     * @Route("admin/{mois}/edit", name="fichefrais_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Fichefrais $fichefrai): Response
-    {
-        $form = $this->createForm(FichefraisType::class, $fichefrai);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('fichefrais_index');
-        }
-
-        return $this->render('fichefrais/edit.html.twig', [
-            'fichefrai' => $fichefrai,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("admin/{mois}", name="fichefrais_delete", methods={"DELETE"})
-     */
-    public function delete(Request $request, Fichefrais $fichefrai): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$fichefrai->getMois(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($fichefrai);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('fichefrais_index');
-    }
-
-
-    /**
+     * Change l'état d'une fiche selon l'état initial
+     *
+     * - Si une fiche est validée on l'a rembourse
+     * - Si une fiche est cloturée, on l'a valide
+     *
+     *
      * @Route("admin/paiement/{id}", name="fiche_frais_paiement", methods={"GET"})
+     * @param Request $request
+     * @return Response
      */
     public function paiement(Fichefrais $fiche): Response
     {
@@ -306,13 +259,15 @@ class FichefraisController extends AbstractController
             }
         $this->entityManager->persist($fiche);
         $this->entityManager->flush();
-        return $this->json(["rep" => "Super"], 200, [], []);
+        return $this->json(["rep" => "fiche modifiée"], 200, [], []);
 
     }
 
-
     /**
+     * Renvoie la liste de ses mois enregistrés (fiches) à l'utilisateur connecté
+     *
      * @Route("/show/list", name="fiche_frais_month")
+     * @param FicheFraisRepository $ficheFraisRepository
      */
     public function showVisteurFicheByMonth(FicheFraisRepository $ficheFraisRepository)
     {
@@ -324,6 +279,8 @@ class FichefraisController extends AbstractController
     }
 
     /**
+     * Renvoie à l'utilisateur connecté le détail d'une de ses fiches
+     *
      * @Route("visiteur/show/fiche", name="fiche_frais_visiteur")
      */
     public function showVisiteurFiche(Request $request, FicheFraisRepository $ficheFraisRepository, LigneFraisForfaitRepository $ligneFraisForfaitRepository, LigneFraisHFRepository $lignefraishorsforfaitRepository)
@@ -342,19 +299,5 @@ class FichefraisController extends AbstractController
 
     }
 
-
-
-    /**
-     * @Route("menu", name="fiche_frais_menu", methods={"GET"})
-     */
-    public function show_visiteur_menu()
-    {
-
-        return $this->render('visiteur/menu-fiches.html.twig', [
-            'fichefrai' => $fichefrai,
-            'form' => $form->createView(),
-        ]);
-
-    }
 
 }

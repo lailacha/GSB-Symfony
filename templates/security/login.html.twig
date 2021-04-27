@@ -10,10 +10,7 @@
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
-    {% if error %}
-    {{  dump(error) }}
-    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
+
 
     {% if app.user %}
         <div class="mb-3">
@@ -43,27 +40,7 @@
       
     </div>
 
-    {#
-        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-        See https://symfony.com/doc/current/security/remember_me.html
-
-        <div class="checkbox mb-3">
-            <label>
-                <input type="checkbox" name="_remember_me"> Remember me
-            </label>
-        </div>
-    #}
 
    
  </form>
 {% endblock %}
-{# 
-<div class=" mt-5 container  p-0 " id='connexion1'>
-    <div class="row ">
-        <div id='login' class=" shadow-lg round mx-auto col-md-6 col-10 p-5 rounded ">
-            <img class='mx-auto d-block mb-5' src="./images/GSB.png" alt="">
-                <button type="button" onclick=window.location.href='{{path('app_login')}}' name="connexionVisiteur" id="" class=" round btn bg-white btn-lg btn-block">Se connecter</button>
-        </div>
-
-    </div>
-</div> #}

@@ -2,30 +2,34 @@
 
 namespace App\Controller;
 
-use App\Entity\Visiteur;
-use App\Entity\LigneFraisForfait;
-use App\Repository\UserRepository;
 use App\Repository\FicheFraisRepository;
-use App\Service\FraisService;
 use App\Repository\FraisForfaitRepository;
+use App\Repository\LigneFraisForfaitRepository;
 use App\Repository\LigneFraisHFRepository;
+use App\Repository\UserRepository;
+use App\Service\FraisService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Serializer;
-
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\LigneFraisForfaitRepository;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Json;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
+/**
+ * Class FraisController
+ * @package App\Controller
+ */
 class FraisController extends AbstractController
 {
 
 
+    /**
+     * @var LigneFraisForfaitRepository
+     */
     private $ligneFraisForfaitRepository;
+    /**
+     * @var FraisForfaitRepository
+     */
     private $fraisForfaitRepository;
     private $LignefraishorsforfaitRepository;
     private $fraisSevice;
@@ -42,17 +46,10 @@ class FraisController extends AbstractController
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @Route("/frais", name="frais")
-     */
-    public function index(): Response
-    {
-
-        $frais = $this->getDoctrine()->getRepository(LigneFraisForfait::class)->find(2);
-        return $this->render('frais/index.html.twig', compact('frais'));
-    }
 
     /**
+     * Renvoie la vue permettant de choisir un visiteur pour récupérer sa fiche de frais
+     *
      * @Route("/frais/validation", name="validateFrais")
      */
     public function validation(UserRepository $userRepository)
@@ -63,7 +60,12 @@ class FraisController extends AbstractController
     }
 
     /**
+     * Renvoie les fiches disponibles (mois) pour un visiteur donné
+     *
      * @Route("/frais/mois", name="sendMois")
+     * @param Request $request
+     * @param FicheFraisRepository $ficheFraisRepository
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function sendMois(Request $request, FicheFraisRepository $ficheFraisRepository)
     {
@@ -71,10 +73,12 @@ class FraisController extends AbstractController
     }
 
     /**
+     * Renvoie la fiche de frais du visiteur en question
+     *
      * @Route("/frais/fiche", name="sendFiche")
      * @param Request $request
      * @param UserRepository $userRepository
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function sendFiche(Request $request, UserRepository $userRepository)
     {
@@ -98,7 +102,12 @@ class FraisController extends AbstractController
 
 
     /**
+     *Permet de valider une fiche de frais
+     *
      * @Route("/frais/fiche/validate", name="validateFiche")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @throws \Doctrine\ORM\ORMException
      */
     public function validerFiche(Request $request)
     {
@@ -111,7 +120,6 @@ class FraisController extends AbstractController
         {
             $this->addFlash('error', "La fiche n'existe pas");
             return $this->redirectToRoute('validateFrais', 404);
-
         }
 
         $fiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', 'CL'));
@@ -124,7 +132,14 @@ class FraisController extends AbstractController
 
 
     /**
+     * Change l'état d'une fiche selon l'état initial
+     *
+     * - Si une fiche est validée on l'a rembourse
+     * - Si une fiche est cloturée, on l'a valide
+     *
      * @Route("/frais/fiche/paiement", name="paiement_action")
+     * @param Request $request
+     * @return Response
      */
     public function actionPaiement(Request $request)
     {

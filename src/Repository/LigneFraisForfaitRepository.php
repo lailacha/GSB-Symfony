@@ -22,21 +22,4 @@ class LigneFraisForfaitRepository extends ServiceEntityRepository
     }
 
 
-
-    // /**
-    //  * @return LigneFraisForfait[] Returns an array of LigneFraisForfait objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 }

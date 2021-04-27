@@ -19,17 +19,4 @@ class LigneFraisHFRepository extends ServiceEntityRepository
         parent::__construct($registry, Lignefraishorsforfait::class);
     }
 
-
-
-    /*
-    public function findOneBySomeField($value): ?Lignefraishorsforfait
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

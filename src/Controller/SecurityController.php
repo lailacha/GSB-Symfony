@@ -10,6 +10,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     /**
+     * Permet à un utilisateur d'acceder au portail de connexion ou de le renvoyer vers le tableau de bord
      * @Route("/login", name="app_login")
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
@@ -27,6 +28,7 @@ class SecurityController extends AbstractController
     }
 
     /**
+     * Permet à l'utilisateur de se deconnecter
      * @Route("/logout", name="app_logout")
      */
     public function logout()

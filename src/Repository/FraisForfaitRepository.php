@@ -21,6 +21,14 @@ class FraisForfaitRepository extends ServiceEntityRepository
         parent::__construct($registry, Fraisforfait::class);
     }
 
+    /**
+     * Initisalise les frais forfait (à quantité nulle) pour un visiteur et un mois
+     *
+     * @param \App\Entity\User $Visiteur
+     * @param string $mois
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function initFraisForfait(User $Visiteur, string $mois){
 
         //Création des frais forfaits
@@ -36,33 +44,6 @@ class FraisForfaitRepository extends ServiceEntityRepository
 
         $this->getEntityManager()->flush();
     }
-    // /**
-    //  * @return Fraisforfait[] Returns an array of Fraisforfait objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Fraisforfait
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 
 }

@@ -19,14 +19,5 @@ class UserController extends AbstractController
         ->getRepository(User::class)
         ->findAll();
 
-        $user =  [
-            ['name' => 'John'],
-        ['name' => 'Mireille']
-    ];
-
-
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController','user' => $users
-        ]);
     }
 }

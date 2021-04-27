@@ -19,9 +19,9 @@ class FicheFraisRepository extends ServiceEntityRepository
         parent::__construct($registry, Fichefrais::class);
     }
 
-    // /**
-    //  * @return Fichefrais[] Returns an array of Fichefrais objects
-    //  */
+    /**
+    * @return Fichefrais[] Returns an array of Fichefrais objects
+    */
     public function findOneByIdJoinedVisiteur($id)
     {
         return $this->createQueryBuilder('f')
@@ -31,9 +31,11 @@ class FicheFraisRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    // /**
-    //  * retrun count of fiche by id and visiteur
-    //  */
+    /**
+     * Retourne le nombre de frais par mois et par visiteur
+     *
+    * @return int
+    */
     public function getCountByIdAndMonth($id, $mois)
     {
 
@@ -48,44 +50,31 @@ class FicheFraisRepository extends ServiceEntityRepository
     }
 
 
-    public function getLastMonthByVisiteur($id)
+    /**
+     * Retourne le dernier mois enregistré par un visiteur
+     *
+     * @param $idUser
+     * @return int|mixed|string
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getLastMonthByVisiteur($idUser)
     {
         return $this->createQueryBuilder('f')
             ->select('max(f.mois)')
             ->andWhere('f.idvisiteur = :idvisiteur')
-            ->setParameter('idvisiteur', $id)
+            ->setParameter('idvisiteur', $idUser)
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    // /**
-    //  * @return Fichefrais[] Returns an array of Fichefrais objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Fichefrais
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+    /**
+     * Retourne les fiches de frais en fonctions de certains critères
+     *
+     * @param Fichefrais $search
+     * @return \Doctrine\ORM\Query
+     */
     public function getAll($search)
     {
         $query = $this->createQueryBuilder('f');

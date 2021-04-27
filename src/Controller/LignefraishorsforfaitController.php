@@ -42,71 +42,13 @@ class LignefraishorsforfaitController extends AbstractController
         $this->LignefraishorsforfaitRepository = $LignefraishorsforfaitRepository;
     }
 
-    /**
-     * @Route("/", name="lignefraishorsforfait_index", methods={"GET"})
-     */
-    public function index(LigneFraisHFRepository $ligneFraisHFRepository): Response
-    {
-        return $this->render('Lignefraishorsforfait/index.html.twig', [
-            'Lignefraishorsforfaits' => $ligneFraisHFRepository->findAll(),
-        ]);
-    }
 
     /**
-     * @Route("/new", name="lignefraishorsforfait_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $Lignefraishorsforfait = new Lignefraishorsforfait();
-        $form = $this->createForm(LignefraishorsforfaitType::class, $Lignefraishorsforfait);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($Lignefraishorsforfait);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('Lignefraishorsforfait_index');
-        }
-
-        return $this->render('Lignefraishorsforfait/new.html.twig', [
-            'Lignefraishorsforfait' => $Lignefraishorsforfait,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="lignefraishorsforfait_show", methods={"GET"})
-     */
-    public function show(Lignefraishorsforfait $Lignefraishorsforfait): Response
-    {
-        return $this->render('Lignefraishorsforfait/show.html.twig', [
-            'Lignefraishorsforfait' => $Lignefraishorsforfait,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="lignefraishorsforfait_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Lignefraishorsforfait $Lignefraishorsforfait): Response
-    {
-        $form = $this->createForm(LignefraishorsforfaitType::class, $Lignefraishorsforfait);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('Lignefraishorsforfait_index');
-        }
-
-        return $this->render('Lignefraishorsforfait/edit.html.twig', [
-            'Lignefraishorsforfait' => $Lignefraishorsforfait,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
+     * Permet de supprimer un frais hors forfait
      * @Route("/fraisHF/delete/{id}", name="lignefraishorsforfait_delete", methods={"POST"})
+     * @param \App\Entity\Lignefraishorsforfait $Lignefraishorsforfait
+     * @param Request $request
+     * @return Response
      */
     public function delete(Request $request, Lignefraishorsforfait $Lignefraishorsforfait): Response
     {
@@ -119,10 +61,16 @@ class LignefraishorsforfaitController extends AbstractController
             return $this->json(["rep" => "non"], 400, [], []);
     }
 
+
     /**
+     * Permet de reporter un frais hors forfait
      * @Route("/fraisHF/report/{id}", name="lignefraishorsforfait_report", methods={"POST"})
+     * @param Request $request
+     * @param \App\Entity\Lignefraishorsforfait $Lignefraishorsforfait
+     * @param FraisService $fraisService
+     * @return Response
      */
-    public function reportFrais(Request $request, Lignefraishorsforfait $Lignefraishorsforfait, FraisService $fraisService)
+    public function reportFrais(Request $request, Lignefraishorsforfait $Lignefraishorsforfait, FraisService $fraisService): Response
     {
         if ($this->isCsrfTokenValid('report', $request->request->get('_token'))) {
 

@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     /**
+     * Redirige l'utilisateur vers le portail si il n'est pas connecté ou vers le tableau de bord dans le cas inverse
      * @Route("/welcome", name="welcome")
      */
     public function index(): Response
@@ -20,9 +21,5 @@ class HomeController extends AbstractController
         else{
             return $this->render('home/index.html.twig');
         }
-
-
     }
-
-   
 }

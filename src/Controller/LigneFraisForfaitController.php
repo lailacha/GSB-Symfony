@@ -31,70 +31,11 @@ class LigneFraisForfaitController extends AbstractController
     }
 
     /**
-     * @Route("/", name="ligne_frais_forfait_index", methods={"GET"})
-     */
-    public function index(LigneFraisForfaitRepository $ligneFraisForfaitRepository): Response
-    {
-        return $this->render('ligne_frais_forfait/index.html.twig', [
-            'ligne_frais_forfaits' => $ligneFraisForfaitRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="ligne_frais_forfait_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $ligneFraisForfait = new LigneFraisForfait();
-        $form = $this->createForm(LigneFraisForfaitType::class, $ligneFraisForfait);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($ligneFraisForfait);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('ligne_frais_forfait_index');
-        }
-
-        return $this->render('ligne_frais_forfait/new.html.twig', [
-            'ligne_frais_forfait' => $ligneFraisForfait,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="ligne_frais_forfait_show", methods={"GET"})
-     */
-    public function show(LigneFraisForfait $ligneFraisForfait): Response
-    {
-        return $this->render('ligne_frais_forfait/show.html.twig', [
-            'ligne_frais_forfait' => $ligneFraisForfait,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="ligne_frais_forfait_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, LigneFraisForfait $ligneFraisForfait): Response
-    {
-        $form = $this->createForm(LigneFraisForfaitType::class, $ligneFraisForfait);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('ligne_frais_forfait_index');
-        }
-
-        return $this->render('ligne_frais_forfait/edit.html.twig', [
-            'ligne_frais_forfait' => $ligneFraisForfait,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
+     * Permet de supprimer un frais forfait
      * @Route("/DELETE/{id}", name="ligne_frais_forfait_delete", methods={"POST"})
+     * @param Request $request
+     * @param \App\Entity\LigneFraisForfait $ligneFraisForfait
+     * @return Response
      */
     public function delete(Request $request, LigneFraisForfait $ligneFraisForfait): Response
     {
@@ -107,11 +48,14 @@ class LigneFraisForfaitController extends AbstractController
             return $this->json(["rep" => "non"], 400, [], []);
     }
 
-
     /**
+     * Permet de modifier la quantité d'un forfait
      * @Route("/majFrais", name="ligne_frais_forfait_maj", methods={"POST"})
+     * @param Request $request
+     * @param LigneFraisForfaitRepository $ligneFraisForfaitRepository
+     * @return Response
      */
-    public function majFraisForfait(Request $request, LigneFraisForfaitRepository $ligneFraisForfaitRepository)
+    public function majFraisForfait(Request $request, LigneFraisForfaitRepository $ligneFraisForfaitRepository) : Response
     {
         if ($this->isCsrfTokenValid('maj', $request->request->get('_token'))) {
 
@@ -132,9 +76,7 @@ class LigneFraisForfaitController extends AbstractController
         }
         return $this->json(["rep" => "Erreur de Token"], 400, [], []);
 
-
     }
-
 }
 
 

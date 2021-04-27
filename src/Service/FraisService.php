@@ -11,6 +11,10 @@ use App\Repository\FraisForfaitRepository;
 use App\Repository\LigneFraisHFRepository;
 use App\Repository\LigneFraisForfaitRepository;
 
+/**
+ * Class FraisService
+ * @package App\Service
+ */
 class FraisService
 {
 
@@ -20,6 +24,14 @@ class FraisService
     private $entityManager;
     private $ficheFraisRepository;
 
+    /**
+     * FraisService constructor.
+     * @param \App\Repository\FicheFraisRepository $ficheFraisRepository
+     * @param \Doctrine\ORM\EntityManagerInterface $entityManager
+     * @param \App\Repository\LigneFraisForfaitRepository $ligneFraisForfaitRepository
+     * @param \App\Repository\FraisForfaitRepository $fraisForfaitRepository
+     * @param \App\Repository\LigneFraisHFRepository $LignefraishorsforfaitRepository
+     */
     public function __construct(FicheFraisRepository $ficheFraisRepository, EntityManagerInterface $entityManager, LigneFraisForfaitRepository $ligneFraisForfaitRepository, FraisForfaitRepository $fraisForfaitRepository, LigneFraisHFRepository $LignefraishorsforfaitRepository)
     {
         $this->ligneFraisForfaitRepository = $ligneFraisForfaitRepository;
@@ -46,6 +58,13 @@ class FraisService
         return $annee . $mois;
     }
 
+    /**
+     * Retourne le mois suivant au format aaaammmm
+     *
+     * @param String $mois au format jj/mm/aaaa
+     *
+     * @return String $mois au format aaaammmm
+     */
     public function getMoisSuivant($mois)
     {
         $numAnnee = substr($mois, 0, 4);
@@ -61,10 +80,18 @@ class FraisService
         return $numAnnee . $numMois;
     }
 
-    public function checkIfNextFicheExist($id, $mois): bool
+    /**
+     * Verifie si une fiche pour le mois prochain existe ou non
+     *
+     * @param int $idUser
+     * @param $mois
+     *
+     * @return bool
+     */
+    public function checkIfNextFicheExist($idUser, $mois): bool
     {
         $mois = $this->getMoisSuivant($mois);
-        $count = $this->ficheFraisRepository->getCountByIdAndMonth($id, $mois);
+        $count = $this->ficheFraisRepository->getCountByIdAndMonth($idUser, $mois);
         if ($count > 0)
             return true;
         else {
@@ -73,9 +100,15 @@ class FraisService
     }
 
 
-    public function checkIfFicheExist($id, $mois): bool
+    /**
+     * Verifie si une fiche pour le mois donné existe ou non
+     * @param $idUser
+     * @param $mois
+     * @return bool
+     */
+    public function checkIfFicheExist($idUser, $mois): bool
     {
-        $count = $this->ficheFraisRepository->getCountByIdAndMonth($id, $mois);
+        $count = $this->ficheFraisRepository->getCountByIdAndMonth($idUser, $mois);
         if ($count > 0)
             return true;
         else {
@@ -84,6 +117,14 @@ class FraisService
     }
 
 
+    /**
+     * Permet de reporter un frais hors forfait au mois suivant
+     *
+     * @param $Lignefraishorsforfait
+     *
+     * @return string
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function reportFrais($Lignefraishorsforfait)
     {
         $visiteur = $Lignefraishorsforfait->getIdvisiteur();
