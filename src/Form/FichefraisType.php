@@ -10,6 +10,7 @@ use App\Repository\FicheFraisRepository;
 use App\Repository\FraisForfaitRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\ChoiceList;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -25,6 +26,8 @@ class FichefraisType extends AbstractType
             ->add('idvisiteur', EntityType::class, ['class' => User::class,
                 'placeholder' => 'Choisir un visiteur',
                 'required' => false,
+                'choice_label' => function ($user) {
+                    return $user->getNom(). '  '.$user->getPrenom();},
                 'attr' => ['class' => 'form-control']
             ])
             ->add('mois', EntityType::class, ['class' => Fichefrais::class,
@@ -34,14 +37,17 @@ class FichefraisType extends AbstractType
                     return $er->createQueryBuilder('f')
                         ->groupBy('f.mois');
                 },
-                'choice_label' => 'mois',
+                'choice_label' => function ($fiche) {
+                    return $fiche->getFormatedMonth();},
                 'attr' => ['class' => 'form-control']
             ])
             ->add('idetat', EntityType::class, ['label' => 'Etat', 'class' => Etat::class,
                 'placeholder' => 'Tous les etats',
+                'choice_label' => 'libelle',
                 'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
+
 
 
             ->add('save', SubmitType::class, ['label' => 'Envoyer',

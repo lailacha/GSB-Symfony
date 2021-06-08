@@ -16,13 +16,14 @@
 
 
             {% if is_granted('ROLE_ADMIN') %}
-                <li class="nav-item active mr-3">
-                    <a class="nav-link" href="{{ path('validateFrais') }}" title="Valider fiche de frais"> Traitement
-                        des mises en paiement <i class="fas fa-money-check-alt"></i></a>
-                </li>
+
                 <li class="nav-item active mr-3 ">
-                    <a class="nav-link" href="{{ path('fichefrais_list') }}" title="Valider fiche de frais">Valider
-                        fiche de frais <i class="fas fa-check-circle"></i></a>
+                    <a class="nav-link" href="{{ path('fichefrais_list') }}" title="Traitement des mises en paiement">Traitement des mises en paiement
+                       <i class="fas fa-money-check-alt"></i></a>
+                </li>
+                <li class="nav-item active mr-3">
+                    <a class="nav-link" href="{{ path('validateFrais') }}" title="Valider fiche de frais"> Valider fiche de frais
+                       <i class="fas fa-check-circle "></i></a>
                 </li>
             {% else %}
                 <li class="nav-item active mr-3">

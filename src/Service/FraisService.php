@@ -132,8 +132,29 @@ class FraisService
         //on vérifie si il y a déjà une fiche pour le mois suivant
         $ficheExist = $this->checkIfNextFicheExist($visiteur, $Lignefraishorsforfait->getMois());
 
+        if($ficheExist)
+        {
+            //On récupère la dernière fiche existante
+            $lastMonth = $this->ficheFraisRepository->getLastMonthByVisiteur($visiteur);
+            $lastFiche = $this->ficheFraisRepository->findOneBy([
+                'idvisiteur' => $visiteur->getId(),
+                'mois' => $lastMonth,
+            ]);
+
+
+            //Modification du mois du frais reporté
+            $Lignefraishorsforfait->setMois($lastMonth);
+            $this->entityManager->persist($Lignefraishorsforfait);
+
+            $this->entityManager->flush();
+            return 'Frais reportééééé';
+
+        }
+
+
+
         //Si elle existe
-        if ($ficheExist) {
+        if (!$ficheExist) {
 
             //On récupère la dernière fiche existante
             $lastMonth = $this->ficheFraisRepository->getLastMonthByVisiteur($visiteur);
@@ -161,9 +182,6 @@ class FraisService
             $newFiche->setDatemodif(new \DateTime("now"));
             $this->entityManager->persist($newFiche);
 
-            //Création des frais forfaits
-        $this->fraisForfaitRepository->initFraisForfait($visiteurEntity, $nextMonth);
-
             //Modification du mois du frais reporté
             $Lignefraishorsforfait->setMois($nextMonth);
             $this->entityManager->persist($Lignefraishorsforfait);
@@ -172,6 +190,7 @@ class FraisService
 
             return 'Frais reporté';
         } else {
+
             return 'Impossible de cloturer la fiche';
         }
 

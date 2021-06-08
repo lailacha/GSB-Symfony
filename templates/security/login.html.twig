@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion{% endblock %}
 
 {% block body %}
 
@@ -24,9 +24,9 @@
 <div id='login' class=" shadow-lg round mx-auto col-md-6 col-10 p-5 rounded ">
             <img class='mx-auto d-block mb-5' src="./images/GSB.png" alt="">
     <h1 class="h3 mb-3 text-white font-weight-normal">Se connecter</h1>
-    <label for="inputLogin">Login</label>
+    <label class="text-white" for="inputLogin">Login</label>
     <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control  mb-3" required autofocus>
-    <label for="inputPassword">Password</label>
+    <label class="text-white" for="inputPassword">Mot de passe</label>
     <input type="password" name="password" id="inputPassword" class=" mb-3 form-control" required>
     <button type="submit" class=" round btn bg-white btn-lg btn-block">Envoyer</button>
 

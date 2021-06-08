@@ -125,7 +125,7 @@ class FraisController extends AbstractController
         $fiche->setIdetat($this->entityManager->getReference('App\Entity\Etat', 'CL'));
         $this->entityManager->persist($fiche);
         $this->entityManager->flush();
-        $this->addFlash('sucess', 'Super le frais est enregistré!');
+        $this->addFlash('sucess', 'Super la fiche est validée!');
         return $this->redirectToRoute('validateFrais');
 
     }

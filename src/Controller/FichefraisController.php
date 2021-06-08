@@ -133,8 +133,8 @@ class FichefraisController extends AbstractController
             $this->entityManager->persist($newFiche);
             $this->entityManager->flush();
 
-            //on initialise ses frais forfaits
-            $fraisForfaitRepository->initFraisForfait($user, $mois);
+            // Un trigger initialise ses frais forfaits à NULL
+
 
             $form = $this->createFormBuilder()
                 ->add('ETP', TextType::class, ['label' =>'Forfait étape', 'attr' => ['class' => 'form-control','label' =>'Envoyer' ]])
